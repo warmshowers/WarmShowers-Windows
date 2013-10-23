@@ -1,7 +1,7 @@
 WarmShowers-Windows
 ===================
 
-* This is the home for Warm Showers for WP7, WP8, and Win8 projects.
+This is the home for Warm Showers for WP7, WP8, and Win8 projects.
 * Currently only the WP7 app is published to the Marketplace/Store, and is the only source included here.  The native WP7 app also works on WP8.
 * To build, load the WarmShowers solution (WarmShowers.sln) into Visual Studio 2012.
 * The source is also versioned by Team Foundation Server (TFS), which creates the $tf1 folder.
