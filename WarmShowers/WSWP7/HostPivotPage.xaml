@@ -1,0 +1,172 @@
+﻿<phone:PhoneApplicationPage
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:controls="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:local="clr-namespace:WSApp"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    xmlns:WSDataModel="clr-namespace:WSApp.DataModel" 
+    xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
+    xmlns:ec="clr-namespace:Microsoft.Expression.Interactivity.Core;assembly=Microsoft.Expression.Interactions"  
+    d:DataContext="{d:DesignData SampleData/HostViewModelSampleData.xaml}" 
+    x:Class="WSApp.HostPivotPage"
+    mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="768"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait"  Orientation="Portrait"
+    shell:SystemTray.IsVisible="True">
+
+    <phone:PhoneApplicationPage.ApplicationBar>
+        <shell:ApplicationBar Mode="Default" Opacity="1.0" IsVisible="True" IsMenuEnabled="True"/>
+    </phone:PhoneApplicationPage.ApplicationBar>
+    <Grid x:Name="LayoutRoot" Background="Transparent" >
+        <controls:Pivot x:Name ="HostPivot" Title="{Binding username}" SelectionChanged="Pivot_SelectionChanged"   GotFocus="HostPivotPage_GotFocus" >
+            <!--Pivot item one-->
+            <controls:PivotItem Header="about"  Margin="0,20,0,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <ListBox x:Name="AboutListBox" ItemsSource="{Binding aboutItems}" SelectionChanged="AboutListBox_SelectionChanged" Grid.Row="0" Margin="12,0,0,0" >
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <local:AboutTemplateSelector Content="{Binding}">
+                                    <local:AboutTemplateSelector.Button>
+                                        <DataTemplate>
+                                            <StackPanel Margin="0,0,0,17" Width="456">
+                                                <TextBlock Text="{Binding Line1}" TextWrapping="NoWrap"  Style="{StaticResource PhoneTextLargeStyle}"/>
+                                                <TextBlock Text="{Binding Line2}" TextWrapping="Wrap"  Style="{StaticResource PhoneTextAccentStyle}"/>
+                                                <TextBlock Text="{Binding Line3}" TextWrapping="Wrap"  Style="{StaticResource PhoneTextAccentStyle}"/>
+                                                <TextBlock Text="{Binding Line4}" TextWrapping="Wrap"  Style="{StaticResource PhoneTextAccentStyle}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </local:AboutTemplateSelector.Button>
+                                    <local:AboutTemplateSelector.Subtle>
+                                        <DataTemplate>
+                                            <StackPanel Margin="0,0,0,17" Width="456">
+                                                <TextBlock Text="{Binding Line1}" TextWrapping="NoWrap"  Style="{StaticResource PhoneTextLargeStyle}"/>                                                
+                                                <TextBlock Text="{Binding Line2}" TextWrapping="Wrap"  Style="{StaticResource PhoneTextSubtleStyle}"/>
+                                                <TextBlock Text="{Binding Line3}" TextWrapping="Wrap"  Style="{StaticResource PhoneTextSubtleStyle}"/>
+                                                <TextBlock Text="{Binding Line4}" TextWrapping="Wrap"  Style="{StaticResource PhoneTextSubtleStyle}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </local:AboutTemplateSelector.Subtle>
+                                    <local:AboutTemplateSelector.Prominent>
+                                        <DataTemplate>
+                                            <StackPanel Margin="0,0,0,17" Width="456">
+                                                <TextBlock Text="{Binding Line1}" TextWrapping="NoWrap"  Style="{StaticResource PhoneTextLargeStyle}"/>                                                 
+                                                <TextBlock Text="{Binding Line2}" TextWrapping="Wrap"  Style="{StaticResource PhoneTextTitle3Style}"/>
+                                                <TextBlock Text="{Binding Line3}" TextWrapping="Wrap"  Style="{StaticResource PhoneTextTitle3Style}"/>
+                                                <TextBlock Text="{Binding Line4}" TextWrapping="Wrap"  Style="{StaticResource PhoneTextTitle3Style}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </local:AboutTemplateSelector.Prominent>
+                                    <local:AboutTemplateSelector.Picture>
+                                        <DataTemplate>
+                                            <StackPanel Margin="0,0,0,17" Width="456">
+                                                <Image Source="{Binding Picture}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </local:AboutTemplateSelector.Picture>
+                                </local:AboutTemplateSelector>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" >
+                        <TextBlock x:Name="LoginInfo"  Text="{Binding loginAlert}" Margin="8,0,8,2" TextWrapping="NoWrap" HorizontalAlignment="Left" Foreground="#FFD61818" Width="115" Style="{StaticResource PhoneTextTitle3Style}" Visibility="Visible"/>
+                        <TextBlock x:Name="PannedInfo"  Text="" Margin="8,0,8,2" TextWrapping="NoWrap" Foreground="#FFD61818"  Width="80" Style="{StaticResource PhoneTextTitle3Style}" Visibility="Visible"/>
+                        <TextBlock x:Name="LocationInfo"  Text="" Margin="8,0,8,2" TextWrapping="NoWrap" Foreground="#FFD61818" Width="115" Style="{StaticResource PhoneTextTitle3Style}" Visibility="Visible"/>
+                        <TextBlock x:Name="NetworkInfo" Text="{Binding networkAlert}" Margin="8,0,8,2" TextWrapping="NoWrap" HorizontalAlignment="Right" Foreground="#FFD61818" Width="110" Style="{StaticResource PhoneTextTitle3Style}" Visibility="Visible"/>
+                    </StackPanel>
+                </Grid>
+            </controls:PivotItem>
+
+            <!--Pivot item two-->
+            <controls:PivotItem Header="hosting"  Margin="0,20,0,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <ListBox x:Name="HostingListBox" ItemsSource="{Binding hostingItems}" Grid.Row="0" Margin="12,0,0,0" >
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="0,0,0,17" Width="456">
+                                    <TextBlock Text="{Binding Line1}" TextWrapping="NoWrap"  Style="{StaticResource PhoneTextLargeStyle}"/>
+                                    <TextBlock Text="{Binding Line2}" TextWrapping="Wrap"  Style="{StaticResource PhoneTextSubtleStyle}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" >
+                        <TextBlock x:Name="LoginInfo1"  Text="{Binding loginAlert}" Margin="8,0,8,2" TextWrapping="NoWrap" HorizontalAlignment="Left" Foreground="#FFD61818" Width="115" Style="{StaticResource PhoneTextTitle3Style}" Visibility="Visible"/>
+                        <TextBlock x:Name="PannedInfo2"  Text="" Margin="8,0,8,2" TextWrapping="NoWrap" Foreground="#FFD61818"  Width="80" Style="{StaticResource PhoneTextTitle3Style}" Visibility="Visible"/>
+                        <TextBlock x:Name="LocationInfo2"  Text="" Margin="8,0,8,2" TextWrapping="NoWrap" Foreground="#FFD61818" Width="115" Style="{StaticResource PhoneTextTitle3Style}" Visibility="Visible"/>
+                        <TextBlock x:Name="NetworkInfo2"  Text="{Binding networkAlert}" Margin="8,0,8,2" TextWrapping="NoWrap" HorizontalAlignment="Right" Foreground="#FFD61818" Width="110" Style="{StaticResource PhoneTextTitle3Style}" Visibility="Visible"/>
+                    </StackPanel>
+                </Grid>
+            </controls:PivotItem>
+
+            <!--Pivot item three-->
+            <controls:PivotItem Header="feedback"  Margin="0,20,0,0">
+                <Grid x:Name="list">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <ListBox x:Name="FeedbackListBox" ItemsSource="{Binding feedbackItems}" Grid.Row="0" Margin="12,0,0,0" >
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="0,0,0,17" Width="456">
+                                    <TextBlock Text="{Binding Header1}" TextWrapping="NoWrap"  Style="{StaticResource PhoneTextLargeStyle}"/>
+                                    <TextBlock Text="{Binding Header2}" TextWrapping="NoWrap"  Style="{StaticResource PhoneTextTitle3Style}"/>
+                                    <TextBlock Text="{Binding Body}" TextWrapping="Wrap"  Style="{StaticResource PhoneTextSubtleStyle}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" >
+                        <TextBlock x:Name="LoginInfo3"  Text="{Binding loginAlert}" Margin="8,0,8,2" TextWrapping="NoWrap" HorizontalAlignment="Left" Foreground="#FFD61818" Width="115" Style="{StaticResource PhoneTextTitle3Style}" Visibility="Visible"/>
+                        <TextBlock x:Name="PannedInfo3"  Text="" Margin="8,0,8,2" TextWrapping="NoWrap" Foreground="#FFD61818"  Width="80" Style="{StaticResource PhoneTextTitle3Style}" Visibility="Visible"/>
+                        <TextBlock x:Name="LocationInfo3"  Text="" Margin="8,0,8,2" TextWrapping="NoWrap" Foreground="#FFD61818" Width="115" Style="{StaticResource PhoneTextTitle3Style}" Visibility="Visible"/>
+                        <TextBlock x:Name="NetworkInfo3"  Text="{Binding networkAlert}" Margin="8,0,8,2" TextWrapping="NoWrap" HorizontalAlignment="Right" Foreground="#FFD61818" Width="110" Style="{StaticResource PhoneTextTitle3Style}" Visibility="Visible"/>
+                    </StackPanel>
+                </Grid>
+            </controls:PivotItem>
+
+            <!--Pivot item four-->
+            <controls:PivotItem Header="messages"  Margin="0,20,0,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <ListBox x:Name="MessagesListBox"  ItemsSource="{Binding messageItems}" SelectionChanged="MessagesListBox_SelectionChanged" Grid.Row="0" Margin="12,0,0,0" >
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="0,0,0,17" Width="456">
+                                    <TextBlock Text="{Binding Header1}" TextWrapping="NoWrap"  Style="{StaticResource PhoneTextLargeStyle}"/>
+                                    <TextBlock Text="{Binding Header2}" TextWrapping="NoWrap"  Style="{StaticResource PhoneTextSubtleStyle}"/>
+                               </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" >
+                        <TextBlock x:Name="LoginInfo4"  Text="{Binding loginAlert}" Margin="8,0,8,2" TextWrapping="NoWrap" HorizontalAlignment="Left" Foreground="#FFD61818" Width="115" Style="{StaticResource PhoneTextTitle3Style}" Visibility="Visible"/>
+                        <TextBlock x:Name="PannedInfo4"  Text="" Margin="8,0,8,2" TextWrapping="NoWrap" Foreground="#FFD61818"  Width="80" Style="{StaticResource PhoneTextTitle3Style}" Visibility="Visible"/>
+                        <TextBlock x:Name="LocationInfo4"  Text="" Margin="8,0,8,2" TextWrapping="NoWrap" Foreground="#FFD61818" Width="115" Style="{StaticResource PhoneTextTitle3Style}" Visibility="Visible"/>
+                        <TextBlock x:Name="NetworkInfo4"  Text="{Binding networkAlert}" Margin="8,0,8,2" TextWrapping="NoWrap" HorizontalAlignment="Right" Foreground="#FFD61818" Width="110" Style="{StaticResource PhoneTextTitle3Style}" Visibility="Visible"/>
+                    </StackPanel>
+                </Grid>
+            </controls:PivotItem>
+        </controls:Pivot>
+    </Grid>
+</phone:PhoneApplicationPage>

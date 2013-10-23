@@ -1,0 +1,13 @@
+﻿<local:MessageViewModel
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"       
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:WSApp.ViewModel" 
+    networkAlert="no network"
+    username="Fred Flintstone"
+    subject="This is the subject">
+
+    <local:MessageViewModel.messageItems>
+        <local:MessageItemViewModel Header1="Message sent on July 13 1962" Body="This is a test message."/>
+        <local:MessageItemViewModel Header1="Reply received on August 2 1970" Body="Test reply."/>
+    </local:MessageViewModel.messageItems>
+</local:MessageViewModel>

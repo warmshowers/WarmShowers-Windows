@@ -1,0 +1,25 @@
+﻿<local:MainViewModel
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"       
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:WSApp.ViewModel" 
+    locationAlert="no location"
+    networkAlert="no network"
+    filteredAlert="filtered"
+    pannedAlert="panned">
+  
+
+    <local:MainViewModel.nearbyItems>
+        <local:NearbyItemViewModel x:Name="Robert Fripp" Line2="2.3 miles from me" />
+        <local:NearbyItemViewModel x:Name="Peter Hammill" Line2="6.2 miles from me" />
+        <local:NearbyItemViewModel x:Name="Hugh Banton" Line2="6.6 miles from me" />
+        <local:NearbyItemViewModel x:Name="Laurie Anderson" Line2="8.2 miles from me" />
+        <local:NearbyItemViewModel x:Name="Adrian Belew" Line2="9.0 miles from me" />
+        <local:NearbyItemViewModel x:Name="David Lowery" Line2="10.6 miles from me" />
+        <local:NearbyItemViewModel x:Name="Doug Martsch" Line2="13.3 miles from me" />
+        <local:NearbyItemViewModel x:Name="Frank Black" Line2="18.1 miles from me" />
+        <local:NearbyItemViewModel x:Name="Todd Rundgren" Line2="19.2 miles from me" />
+        <local:NearbyItemViewModel x:Name="Ian Anderson" Line2="21.3 miles from me" />
+        <local:NearbyItemViewModel x:Name="Steve Hackett" Line2="23.8 miles from me" />
+    </local:MainViewModel.nearbyItems>
+
+</local:MainViewModel>

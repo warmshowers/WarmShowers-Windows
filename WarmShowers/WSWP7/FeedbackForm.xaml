@@ -1,0 +1,66 @@
+﻿<phone:PhoneApplicationPage 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    xmlns:ViewModel="clr-namespace:WSApp.ViewModel"
+    x:Class="WSApp.FeedbackForm"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d"
+    shell:SystemTray.IsVisible="True" >
+
+    <phone:PhoneApplicationPage.ApplicationBar>
+        <shell:ApplicationBar Mode="Default" Opacity="1.0" IsVisible="True" IsMenuEnabled="False">
+            <shell:ApplicationBarIconButton IconUri="/Images/Appbar/appbar.sendmessage.rest.png" Text="send" Click="ApplicationBarIconButton_Click_Reply"/>
+        </shell:ApplicationBar>
+    </phone:PhoneApplicationPage.ApplicationBar>
+    
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid x:Name="LayoutRoot" Background="Transparent"  >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <ScrollViewer Height="Auto" Grid.Row="0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal" Grid.Row="0">
+                    <TextBlock Text="Member: " IsHitTestVisible="False" VerticalAlignment="Center" Foreground="{StaticResource PhoneForegroundBrush}"/>
+                    <TextBlock x:Name="To" FontSize="20" VerticalAlignment="Center" Margin="0,29,0,28" Width="171" />
+                    <TextBlock Text="was:" IsHitTestVisible="False" VerticalAlignment="Center" Width="42" Foreground="{StaticResource PhoneForegroundBrush}" Margin="0,29,0,28"  />
+                    <toolkit:ListPicker x:Name="GuestOrHost"  FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Left" Width="167" SelectionChanged="GuestOrHost_SelectionChanged">
+                    </toolkit:ListPicker>
+                </StackPanel>
+                <Rectangle Height="1" Grid.Row="1" Visibility="Visible" Fill="#FFF7F3F3" VerticalAlignment="Top"/>
+                <StackPanel Orientation="Horizontal" Grid.Row="1">
+                    <TextBlock Text="Date met: " VerticalAlignment="Center" Width="87"  />
+                    <toolkit:ListPicker x:Name="MonthMet" Width="51" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Left" SelectionChanged="MonthMet_SelectionChanged" >
+                    </toolkit:ListPicker>
+                    <toolkit:ListPicker x:Name="YearMet"  Width="64" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Left" SelectionChanged="YearMet_SelectionChanged" />
+                    <TextBlock Text="Experience:" IsHitTestVisible="False" VerticalAlignment="Center" Width="101" Foreground="{StaticResource PhoneForegroundBrush}" Margin="0,29,0,28" />
+                    <toolkit:ListPicker x:Name="Experience"  FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Left" Width="116" SelectionChanged="Experience_SelectionChanged">
+                   </toolkit:ListPicker>
+                </StackPanel>
+                <StackPanel Grid.Row="2" >
+                    <Rectangle Height="1" Visibility="Visible" Fill="#FFF7F3F3" VerticalAlignment="Top"/>
+                    <TextBox x:Name="Body"  MinHeight="540" Height="Auto" Width="509" VerticalAlignment="Bottom" HorizontalAlignment="Left" TextWrapping="Wrap" FontSize="20" AcceptsReturn="True" Margin="-14,0,-15,0" KeyUp="Body_KeyUp" />
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
+        <StackPanel Orientation="Horizontal" Grid.Row="1">
+            <TextBlock x:Name="Status" Margin="8,0,8,2" Width="342" Foreground="{StaticResource PhoneForegroundBrush}" Style="{StaticResource PhoneTextTitle3Style}"  />
+            <TextBlock x:Name="NetworkAlert" Margin="8,0,8,2" Foreground="#FFD61818"  Width="110" Style="{StaticResource PhoneTextTitle3Style}"  />
+        </StackPanel>
+    </Grid>
+</phone:PhoneApplicationPage>
+

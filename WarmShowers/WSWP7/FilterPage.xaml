@@ -1,0 +1,62 @@
+﻿<phone:PhoneApplicationPage 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    d:DataContext="{d:DesignData SampleData/FilterViewModelSampleData.xaml}" 
+    xmlns:ViewModel="clr-namespace:WSApp.ViewModel"
+    x:Class="WSApp.FilterPage"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d"
+    shell:SystemTray.IsVisible="True" >
+
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <Grid.RowDefinitions>
+        	<RowDefinition Height="Auto" MinHeight="150"/>
+        	<RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <!--TitlePanel contains the name of the application and page title-->
+        <StackPanel Grid.Row="0" Margin="12,17,0,28">
+            <TextBlock Text="WARM SHOWERS" Style="{StaticResource PhoneTextNormalStyle}"/>
+            <TextBlock Text="filter" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+        </StackPanel>
+
+        <!--ContentPanel - place additional content here-->
+        <Grid x:Name="ContentPanel" Margin="12,138,12,0" Grid.RowSpan="2">
+            <TextBlock HorizontalAlignment="Left" Margin="10,54,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="32" Height="48">
+            	<Run Text="Number in party"/>
+            	<LineBreak/>
+            	<Run/>
+            </TextBlock>
+            <ListBox HorizontalAlignment="Left" Height="51" Margin="268,53,0,0" VerticalAlignment="Top" Width="178" IsSynchronizedWithCurrentItem="False" FontSize="32"/>
+            <TextBlock HorizontalAlignment="Left" Margin="10,121,0,469" TextWrapping="Wrap" Text="Bed" VerticalAlignment="Center" FontSize="32" Height="40"/>
+            <toolkit:ToggleSwitch HorizontalAlignment="Left" Margin="261,97,0,430" VerticalAlignment="Center" Width="195" IsChecked="{Binding bed, Mode=TwoWay}" FontSize="32"/>
+            <TextBlock HorizontalAlignment="Left" Margin="10,184,0,405" TextWrapping="Wrap" Text="Food" VerticalAlignment="Center" FontSize="32" Height="41"/>
+            <toolkit:ToggleSwitch HorizontalAlignment="Left" Margin="261,161,0,366" VerticalAlignment="Center" Width="195" IsChecked="{Binding food, Mode=TwoWay}"/>
+            <TextBlock HorizontalAlignment="Left" Margin="10,312,0,272" TextWrapping="Wrap" Text="Lawn Space " VerticalAlignment="Center" FontSize="32" Height="46"/>
+            <toolkit:ToggleSwitch HorizontalAlignment="Left" Margin="261,290,0,237" VerticalAlignment="Center" Width="195" IsChecked="{Binding lawn, Mode=TwoWay}" />
+            <TextBlock HorizontalAlignment="Left" Margin="10,376,0,216" TextWrapping="Wrap" Text="SAG " VerticalAlignment="Center" FontSize="32" Height="38"/>
+            <toolkit:ToggleSwitch HorizontalAlignment="Left" Margin="261,352,0,175" VerticalAlignment="Center" Width="195" IsChecked="{Binding sag, Mode=TwoWay}"/>
+            <TextBlock HorizontalAlignment="Left" Margin="10,440,0,152" TextWrapping="Wrap" Text="Shower" VerticalAlignment="Center" FontSize="32" Height="38"/>
+            <toolkit:ToggleSwitch HorizontalAlignment="Left" Margin="261,416,0,111" VerticalAlignment="Center" Width="195" IsChecked="{Binding shower, Mode=TwoWay}"/>
+            <TextBlock HorizontalAlignment="Left" Margin="10,503,0,81" TextWrapping="Wrap" Text="Use of Kitchen" VerticalAlignment="Center" FontSize="32" Height="46"/>
+            <toolkit:ToggleSwitch HorizontalAlignment="Left" Margin="261,479,0,48" VerticalAlignment="Center" Width="195" IsChecked="{Binding kitchen, Mode=TwoWay}"/>
+            <TextBlock HorizontalAlignment="Left" Margin="10,566,0,10" TextWrapping="Wrap" Text="Storage" VerticalAlignment="Center" FontSize="32" Height="54"/>
+            <toolkit:ToggleSwitch HorizontalAlignment="Left" Margin="261,542,0,-15" VerticalAlignment="Center" Width="195" IsChecked="{Binding storage, Mode=TwoWay}"/>
+            <TextBlock HorizontalAlignment="Left" Margin="10,246,0,339" TextWrapping="Wrap" Text="Laundry" VerticalAlignment="Center" FontSize="32" Height="45" RenderTransformOrigin="0.532,-0.913"/>
+            <toolkit:ToggleSwitch HorizontalAlignment="Left" Margin="261,222,0,305" VerticalAlignment="Center" Width="195" IsChecked="{Binding laundry, Mode= TwoWay}" />
+            <TextBlock HorizontalAlignment="Left" Margin="330,-6,0,0" TextWrapping="Wrap" Text="{Binding filterAlert}" VerticalAlignment="Top" FontSize="32" Foreground="#FFD62525" Width="126"/>
+            <toolkit:ListPicker HorizontalAlignment="Left" Margin="330,42,0,0" VerticalAlignment="Top" Width="99"/>
+        </Grid>
+    </Grid>
+
+</phone:PhoneApplicationPage>
+

@@ -1,0 +1,21 @@
+﻿<local:HostViewModel
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"       
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:WSApp.ViewModel" 
+    networkAlert="no network"
+    >
+
+    <local:HostViewModel.feedbackItems>
+        <local:FeedbackItemViewModel Header1="Robert Fripp" Header2="reviewed this host as a host on January 5, 2013" Body="Everything I could ask for in a Warmshowers experience! A warm and friendly family opening up their beautiful home to a haggard and stinky cyclist. 
+ Kurt, Lisa and Zoe were amazing hosts, their home was strategically located in a beautifully quiet neighborhood close to the downtown ammenities but far enough removed from the hustle and noise. 
+ They offered engaging conversations, warm smiles, relaxed atmosphere...an overall great experience. Thanks again Zieglers!"/>
+        <local:FeedbackItemViewModel Header1="Peter Hammill" Header2="reviewed this host as a guest on April 5, 1996" Body="Feedback body"/>
+    </local:HostViewModel.feedbackItems>
+    <local:HostViewModel.aboutItems>
+        <local:AboutItemViewModel  Line1="comments" Line2="I'm a year-round commuter and summer touring cyclist. I enjoy self-organized tours as well as the occasional professional tour.  Just completed an epic cycling adventure with my daughter.  Would enjoy hosting up to three people and hearing about their adventures.  We have a surly but mostly harlmless cat and a dog. I live in Boise's North End and have a spare bedroom\/bathroom suite with, yes, a warm shower of your own."/>
+    </local:HostViewModel.aboutItems>
+    <local:HostViewModel.hostingItems>
+        <local:HostingItemViewModel  Line1="Distance from bike shop" Line2="Two miles"/>
+    </local:HostViewModel.hostingItems>
+
+</local:HostViewModel>

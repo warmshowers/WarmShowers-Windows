@@ -1,0 +1,141 @@
+﻿<phone:PhoneApplicationPage 
+    xmlns:Maps="clr-namespace:Microsoft.Phone.Controls.Maps;assembly=Microsoft.Phone.Controls.Maps"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:controls="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    xmlns:local="clr-namespace:WSApp"  
+    xmlns:LocationServices="clr-namespace:WSApp.LocationServices"  
+    d:DataContext="{d:DesignData SampleData/MainViewModelSampleData.xaml}"
+    x:Class="WSApp.MainPage" 
+    mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="768" 
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait"  Orientation="Portrait"
+    shell:SystemTray.IsVisible="True">
+
+    <phone:PhoneApplicationPage.ApplicationBar>
+        <shell:ApplicationBar x:Name="MainAppbar" Mode="Default" Opacity="1.0" IsVisible="False" IsMenuEnabled="True"/>
+    </phone:PhoneApplicationPage.ApplicationBar>
+
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid x:Name="LayoutRoot" Background="Transparent" Visibility="Visible" >
+
+        <!--Pivot Control-->
+        <controls:Pivot x:Name="MainPivot" Title="WARM SHOWERS HOSTS" SelectionChanged="Pivot_SelectionChanged" Visibility="Collapsed">
+            
+            <!--Pivot item one-->
+            <controls:PivotItem Header="nearby" Margin="0,20,0,0">
+                <Grid x:Name="list">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <ListBox x:Name="NearbyListBox"  ItemsSource="{Binding nearbyItemsSource.View}"  Grid.Row="0" Margin="12,0,0,0" >
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel >
+                                    <toolkit:ContextMenuService.ContextMenu>
+                                        <toolkit:ContextMenu>
+                                            <toolkit:MenuItem Header="{Binding ContextMenuLabel}" Click="pinNearbyItem_Click"/>
+                                        </toolkit:ContextMenu>
+                                    </toolkit:ContextMenuService.ContextMenu>
+                                    <TextBlock Text="{Binding Name}" TextWrapping="NoWrap"   Style="{StaticResource PhoneTextExtraLargeStyle}"/>
+                                    <TextBlock Text="{Binding Line2}" TextWrapping="Wrap"  Style="{StaticResource PhoneTextSubtleStyle}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <StackPanel Orientation="Horizontal" Grid.Row="1">
+<!--                        <TextBlock x:Name="FilterInfo"  Text="{Binding filteredAlert}" HorizontalAlignment="Left"  Foreground="#FFD61818" Width="75" Style="{StaticResource PhoneTextTitle3Style}" Visibility="Collapsed"/> -->
+                        <TextBlock x:Name="LoginInfo"  Text="{Binding loginAlert}" Margin="8,0,8,2" TextWrapping="NoWrap" Foreground="#FFD61818" Width="115" Style="{StaticResource PhoneTextTitle3Style}" Visibility="Collapsed"/>
+                        <TextBlock x:Name="PannedInfo"  Text="{Binding pannedAlert}" Margin="8,0,8,2" TextWrapping="NoWrap" Foreground="#FFD61818"  Width="80"  Style="{StaticResource PhoneTextTitle3Style}" Visibility="Collapsed"/>
+                        <TextBlock x:Name="LocationInfo" Text="{Binding locationAlert}"  Margin="8,0,8,2" TextWrapping="NoWrap" Foreground="#FFD61818" Width="115"  Style="{StaticResource PhoneTextTitle3Style}" Visibility="Collapsed"/>
+                        <TextBlock x:Name="NetworkInfo"  Text="{Binding networkAlert}" Margin="8,0,8,2"  TextWrapping="NoWrap" Foreground="#FFD61818" Width="110" Style="{StaticResource PhoneTextTitle3Style}" Visibility="Collapsed"/>
+                    </StackPanel>
+                </Grid>
+             </controls:PivotItem>
+            
+            <!--Pivot item two-->
+            <controls:PivotItem Header="pinned" Margin="0,20,0,0">
+                <Grid x:Name="list2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <ListBox x:Name="PinnedListBox" ItemsSource="{Binding pinnedItemsSource.View}" Grid.Row="0" Margin="12,0,0,0">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Width="456">
+                                    <toolkit:ContextMenuService.ContextMenu>
+                                        <toolkit:ContextMenu>
+                                            <toolkit:MenuItem Header="unpin" Click="UnpinPinnedItem_Click"/>
+                                        </toolkit:ContextMenu>
+                                    </toolkit:ContextMenuService.ContextMenu>
+                                    <TextBlock Text="{Binding Name}" TextWrapping="NoWrap"  Style="{StaticResource PhoneTextExtraLargeStyle}"/>
+                                    <TextBlock Text="{Binding line2}" TextWrapping="Wrap"  Style="{StaticResource PhoneTextSubtleStyle}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <StackPanel Orientation="Horizontal" Grid.Row="1">
+                        <TextBlock x:Name="LoginInfo3"  Text="{Binding loginAlert}" Margin="8,0,8,2" TextWrapping="NoWrap" Foreground="#FFD61818" Width="115" Style="{StaticResource PhoneTextTitle3Style}" Visibility="Collapsed"/>
+                        <TextBlock x:Name="PannedInfo3"  Text="" Margin="8,0,8,2" TextWrapping="NoWrap" Foreground="#FFD61818"  Width="80" Style="{StaticResource PhoneTextTitle3Style}" Visibility="Visible"/>
+                        <TextBlock x:Name="LocationInfo3"  Text="" Margin="8,0,8,2" TextWrapping="NoWrap" Foreground="#FFD61818" Width="115" Style="{StaticResource PhoneTextTitle3Style}" Visibility="Visible"/>
+                        <TextBlock x:Name="NetworkInfo3"  Text="{Binding networkAlert}" Margin="8,0,8,2" TextWrapping="NoWrap" Foreground="#FFD61818" Width="110" Style="{StaticResource PhoneTextTitle3Style}" Visibility="Collapsed"/>
+                    </StackPanel>
+                </Grid>
+            </controls:PivotItem>
+        </controls:Pivot>
+
+        <Grid>
+            <Image x:Name="SplashScreen" Source="SplashScreenImage.jpg" Visibility="Visible" Stretch="Fill" VerticalAlignment="Top" HorizontalAlignment="Left" />
+        </Grid>
+
+        <Grid x:Name="MapPage" Background="Transparent" Visibility="Visible" Margin="0,0,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Maps:Map x:Name="myMap"  Visibility="Visible" IsEnabled="True" Grid.Row="0" Center="{Binding mapLocation, Mode=TwoWay}" ZoomLevel="{Binding zoom, Mode=TwoWay}" CredentialsProvider="{Binding CredentialsProvider}" ViewChangeEnd="myMap_ViewChangeEnd" ZoomBarVisibility="Visible" LogoVisibility="Collapsed">
+                <Maps:MapItemsControl ItemsSource="{Binding mapItems}"  >
+                    <Maps:MapItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Maps:Pushpin  Tag ="{Binding userID}" Location="{Binding location}" Content ="{Binding username}" Template="{StaticResource HostsPushpinTemplate}" Tap="Pushpin_Tap" />           
+                        </DataTemplate> 
+             		</Maps:MapItemsControl.ItemTemplate>
+            	</Maps:MapItemsControl>
+            </Maps:Map>
+ 
+            <StackPanel x:Name="SearchCanvas" Margin="0,0,0,593" Opacity=".8" Background="Black" Grid.Row="0" Orientation="Horizontal"  Visibility="Collapsed">
+                <TextBox x:Name="SearchBox" Grid.Row="0" Opacity ="1.0" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="-13,0,0,0" Width="426" Height="71"  KeyDown="SearchBox_KeyDown" />
+                <Button x:Name="SearchButton" Opacity="1.0" VerticalAlignment="Top" HorizontalAlignment="Left" Click="SearchButton_Click" Width="65" Height="71"  >
+                    <Button.Background>
+                        <ImageBrush Stretch="None" ImageSource="/Images/Appbar/appbar.magnify.png"/>
+                    </Button.Background>
+                </Button>
+            </StackPanel>
+
+
+            <StackPanel Orientation="Horizontal" Grid.Row="1">
+<!--                <TextBlock x:Name="FilterInfo2"  Text="{Binding filteredAlert}" HorizontalAlignment="Left" Foreground="#FFD61818"  Width="75"  Style="{StaticResource PhoneTextTitle3Style}" Visibility="Collapsed"/> -->
+                <TextBlock x:Name="LoginInfo2"  Text="{Binding loginAlert}" Margin="8,0,8,2" TextWrapping="NoWrap" Foreground="#FFD61818" Width="115" Style="{StaticResource PhoneTextTitle3Style}" Visibility="Collapsed"/>
+                <TextBlock x:Name="PannedInfo2"  Text="{Binding pannedAlert}" Margin="8,0,8,2" TextWrapping="NoWrap" Foreground="#FFD61818"  Width="80" Style="{StaticResource PhoneTextTitle3Style}" Visibility="Collapsed"/>
+                <TextBlock x:Name="LocationInfo2"  Text="{Binding locationAlert}" Margin="8,0,8,2" TextWrapping="NoWrap" Foreground="#FFD61818" Width="115" Style="{StaticResource PhoneTextTitle3Style}" Visibility="Collapsed"/>
+                <TextBlock x:Name="NetworkInfo2"  Text="{Binding networkAlert}" Margin="8,0,8,2" TextWrapping="NoWrap" Foreground="#FFD61818" Width="110" Style="{StaticResource PhoneTextTitle3Style}" Visibility="Collapsed"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</phone:PhoneApplicationPage>

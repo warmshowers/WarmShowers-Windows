@@ -1,0 +1,258 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.20506</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{FBB8C944-781C-4F04-9D48-882B031DB7D3}</ProjectGuid>
+    <ProjectTypeGuids>{C089C8C0-30E0-4E22-80C0-CE093F111A43};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WSApp</RootNamespace>
+    <AssemblyName>WSApp</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <TargetFrameworkProfile>WindowsPhone71</TargetFrameworkProfile>
+    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+    <SilverlightApplication>true</SilverlightApplication>
+    <SupportedCultures>
+    </SupportedCultures>
+    <XapOutputs>true</XapOutputs>
+    <GenerateSilverlightManifest>true</GenerateSilverlightManifest>
+    <XapFilename>WSApp.xap</XapFilename>
+    <SilverlightManifestTemplate>Properties\AppManifest.xml</SilverlightManifestTemplate>
+    <SilverlightAppEntry>WSApp.App</SilverlightAppEntry>
+    <ValidateXaml>true</ValidateXaml>
+    <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <ExpressionBlendVersion>5.0.31017.0</ExpressionBlendVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Bin\Release</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Expression.Interactions" />
+    <Reference Include="Microsoft.Phone" />
+    <Reference Include="Microsoft.Phone.Controls" />
+    <Reference Include="microsoft.phone.controls.maps, Version=7.0.0.0, Culture=neutral, PublicKeyToken=24eec0d8c86cda1e, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Phone.Controls.Toolkit, Version=7.0.0.0, Culture=neutral, PublicKeyToken=b772ad94eb9ca604, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\WPtoolkit.4.2012.10.30\lib\sl4-windowsphone71\Microsoft.Phone.Controls.Toolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Phone.Interop" />
+    <Reference Include="Microsoft.Phone.Reactive" />
+    <Reference Include="System.Device" />
+    <Reference Include="System.Observable" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Servicemodel.Web" />
+    <Reference Include="System.Windows" />
+    <Reference Include="system" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Windows.Interactivity" />
+    <Reference Include="System.Xml" />
+    <Reference Include="mscorlib.extensions" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ContactForm.xaml.cs">
+      <DependentUpon>ContactForm.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Data Access\ApplicationSettings.cs" />
+    <Compile Include="Data Access\IsolatedStorage.cs" />
+    <Compile Include="Model\Cache.cs" />
+    <Compile Include="Model\PinnedData.cs" />
+    <Compile Include="Model\Shared.cs" />
+    <Compile Include="Model\NearbyData.cs" />
+    <Compile Include="Model\Filter.cs" />
+    <Compile Include="FeedbackForm.xaml.cs">
+      <DependentUpon>FeedbackForm.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Data Contract\FeedbackData.cs" />
+    <Compile Include="Data Contract\MessageData.cs" />
+    <Compile Include="Data Contract\MessagesData.cs" />
+    <Compile Include="Data Contract\HostsData.cs" />
+    <Compile Include="MessagePage.xaml.cs">
+      <DependentUpon>MessagePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AboutPage.xaml.cs">
+      <DependentUpon>AboutPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View Model\AboutItemViewModel.cs" />
+    <Compile Include="View Model\HostingItemViewModel.cs" />
+    <Compile Include="View Model\FilterViewModel.cs" />
+    <Compile Include="View Model\MessageViewModel.cs" />
+    <Compile Include="View Model\MessageItemViewModel.cs" />
+    <Compile Include="View Model\MessagesItemViewModel.cs" />
+    <Compile Include="Data Access\WebService.cs" />
+    <DesignData Include="Sample Data\HostViewModelSampleData.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </DesignData>
+    <Compile Include="Common\Utilities.cs" />
+    <Compile Include="Common\NetworkService.cs" />
+    <Compile Include="View Model\FeedbackItemViewModel.cs" />
+    <Compile Include="View Model\PinnedItemViewModel.cs" />
+    <Compile Include="View Model\MapItemViewModel.cs" />
+    <Compile Include="WebResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WebResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="View Model\HostViewModel.cs" />
+    <Compile Include="Data Contract\ProfilesData.cs" />
+    <Compile Include="FilterPage.xaml.cs">
+      <DependentUpon>FilterPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="HostPivotPage.xaml.cs">
+      <DependentUpon>HostPivotPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\LocationService.cs" />
+    <Compile Include="MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="View Model\NearbyItemViewModel.cs" />
+    <Compile Include="View Model\MainViewModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </ApplicationDefinition>
+    <Page Include="ContactForm.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="FeedbackForm.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="FilterPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="HostPivotPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <DesignData Include="Sample Data\MainViewModelSampleData.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </DesignData>
+    <Page Include="MessagePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <DesignData Include="Sample Data\MessageViewModelSampleData.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </DesignData>
+    <DesignData Include="Sample Data\FilterViewModelSampleData.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </DesignData>
+    <Page Include="AboutPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="Properties\AppManifest.xml" />
+    <None Include="Properties\WMAppManifest.xml">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ApplicationIcon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Background.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Appbar\appbar.directions.png" />
+    <Content Include="Images\Appbar\appbar.feedback.png" />
+    <Content Include="Images\Appbar\appbar.filter.png" />
+    <Content Include="Images\Appbar\appbar.location.circle.png" />
+    <Content Include="Images\Appbar\appbar.magnify.png" />
+    <Content Include="Images\Appbar\appbar.manage.rest.png" />
+    <Content Include="Images\Appbar\appbar.map.png" />
+    <Content Include="Images\Appbar\appbar.map.position.rest.png" />
+    <Content Include="Images\Appbar\appbar.pin.pinned.png" />
+    <Content Include="Images\Appbar\appbar.pin.unpinned.png" />
+    <Content Include="Images\Appbar\appbar.refresh.png" />
+    <Content Include="Images\Appbar\appbar.reply.people.png" />
+    <Content Include="Images\Appbar\appbar.sendmessage.rest.png" />
+    <Content Include="Images\Appbar\appbar.thumbs.up.png" />
+    <Content Include="Images\About\facebook.png" />
+    <Content Include="Images\AppStore\About.png" />
+    <Content Include="Images\AppStore\Feedback.png" />
+    <Content Include="Images\AppStore\Hosting.png" />
+    <Content Include="Images\AppStore\Map.png" />
+    <Content Include="Images\AppStore\Message.png" />
+    <Content Include="Images\AppStore\Nearby.png" />
+    <Content Include="Images\AppStore\Pinned.png" />
+    <Content Include="Images\AppStore\SendMessage.png" />
+    <Content Include="Images\AppStore\WSStoreBackground.png" />
+    <Content Include="Images\AppStore\WSStoreTile.png" />
+    <Content Include="Images\Pushpins\pinned.png" />
+    <Content Include="Images\Pushpins\unpinned.png" />
+    <Content Include="Images\About\twitter.png" />
+    <Content Include="Images\About\WSBanner.png" />
+    <Content Include="Release History.txt" />
+    <Content Include="SplashScreenImage.jpg" />
+    <Content Include="Images\Appbar\appbar.Delete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="WebResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>WebResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ProjectExtensions />
+</Project>

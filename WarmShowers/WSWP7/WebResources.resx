@@ -1,0 +1,561 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Bed" xml:space="preserve">
+    <value>Bed</value>
+  </data>
+  <data name="Food" xml:space="preserve">
+    <value>Food</value>
+  </data>
+  <data name="Kitchen" xml:space="preserve">
+    <value>Use of kitchen</value>
+  </data>
+  <data name="Laundry" xml:space="preserve">
+    <value>Laundry</value>
+  </data>
+  <data name="LawnSpace" xml:space="preserve">
+    <value>Lawn space</value>
+  </data>
+  <data name="loading" xml:space="preserve">
+    <value>loading...</value>
+  </data>
+  <data name="SAG" xml:space="preserve">
+    <value>SAG</value>
+  </data>
+  <data name="Shower" xml:space="preserve">
+    <value>Shower</value>
+  </data>
+  <data name="Storage" xml:space="preserve">
+    <value>Storage</value>
+  </data>
+  <data name="ThisHostMayOffer" xml:space="preserve">
+    <value>this host may offer</value>
+  </data>
+  <data name="Filtered" xml:space="preserve">
+    <value>filtered</value>
+  </data>
+  <data name="NoLocation" xml:space="preserve">
+    <value>no location</value>
+  </data>
+  <data name="NoNetwork" xml:space="preserve">
+    <value>no network</value>
+  </data>
+  <data name="km" xml:space="preserve">
+    <value>km</value>
+    <comment>abbreviation for kilometers</comment>
+  </data>
+  <data name="mi" xml:space="preserve">
+    <value>mi</value>
+    <comment>abbreviation for miles</comment>
+  </data>
+  <data name="NearbyListEmptyBody1" xml:space="preserve">
+    <value>Use the map to zoom out to a larger search area or to pan to a different location, or press the me button to search from the current location.  </value>
+  </data>
+  <data name="NearbyListEmptyBody2" xml:space="preserve">
+    <value>Also, filters are active.  Clearing any filters may return hosts within the current search area.</value>
+  </data>
+  <data name="NearbyListEmptyBody3" xml:space="preserve">
+    <value>The map and me buttons are in the toolbar below.</value>
+  </data>
+  <data name="NearbyListEmptyHeader" xml:space="preserve">
+    <value>no hosts were found</value>
+  </data>
+  <data name="Panned" xml:space="preserve">
+    <value>panned</value>
+  </data>
+  <data name="PinnedListEmptyBody" xml:space="preserve">
+    <value>Pinned hosts appear here for quick, offline access.   To manually pin a host, select from the 'nearby' list and press the 'pin' button.  Hosts are automatically pinned when any of the following actions are taken from within the Warm Showers app:  contact or reply to a host, send a text, make a phone call, or map an address. </value>
+  </data>
+  <data name="PinnedListEmptyHeader" xml:space="preserve">
+    <value>no hosts are pinned</value>
+  </data>
+  <data name="Apr" xml:space="preserve">
+    <value>Apr</value>
+  </data>
+  <data name="Aug" xml:space="preserve">
+    <value>Aug</value>
+  </data>
+  <data name="Dec" xml:space="preserve">
+    <value>Dec</value>
+  </data>
+  <data name="Feb" xml:space="preserve">
+    <value>Feb</value>
+  </data>
+  <data name="Jan" xml:space="preserve">
+    <value>Jan</value>
+  </data>
+  <data name="Jul" xml:space="preserve">
+    <value>Jul</value>
+  </data>
+  <data name="Jun" xml:space="preserve">
+    <value>Jun</value>
+  </data>
+  <data name="Mar" xml:space="preserve">
+    <value>Mar</value>
+  </data>
+  <data name="May" xml:space="preserve">
+    <value>May</value>
+  </data>
+  <data name="none" xml:space="preserve">
+    <value>none</value>
+  </data>
+  <data name="Nov" xml:space="preserve">
+    <value>Nov</value>
+  </data>
+  <data name="Oct" xml:space="preserve">
+    <value>Oct</value>
+  </data>
+  <data name="Sep" xml:space="preserve">
+    <value>Sep</value>
+  </data>
+  <data name="by" xml:space="preserve">
+    <value>by</value>
+  </data>
+  <data name="aboutMenuText" xml:space="preserve">
+    <value>about...</value>
+  </data>
+  <data name="aerialViewMenuText" xml:space="preserve">
+    <value>aerial map</value>
+  </data>
+  <data name="filterButtonText" xml:space="preserve">
+    <value>filter</value>
+  </data>
+  <data name="LogoutMenuText" xml:space="preserve">
+    <value>log out</value>
+  </data>
+  <data name="mapButtonText" xml:space="preserve">
+    <value>map</value>
+  </data>
+  <data name="meButtonText" xml:space="preserve">
+    <value>me</value>
+  </data>
+  <data name="roadViewMenuText" xml:space="preserve">
+    <value>road map</value>
+  </data>
+  <data name="searchButtonText" xml:space="preserve">
+    <value>search</value>
+  </data>
+  <data name="trafficViewMenuText" xml:space="preserve">
+    <value>see current traffic</value>
+  </data>
+  <data name="unitsMenuTextKm" xml:space="preserve">
+    <value>show distances in km</value>
+  </data>
+  <data name="unitsMenuTextMi" xml:space="preserve">
+    <value>show distances in mi</value>
+  </data>
+  <data name="webSiteMenuText" xml:space="preserve">
+    <value>visit warmshowers.org</value>
+  </data>
+  <data name="invalid" xml:space="preserve">
+    <value>invalid</value>
+  </data>
+  <data name="New" xml:space="preserve">
+    <value>new</value>
+  </data>
+  <data name="ContactSubject" xml:space="preserve">
+    <value>Initial Warm Showers contact</value>
+  </data>
+  <data name="NewMessageReceived" xml:space="preserve">
+    <value>new message</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>on</value>
+  </data>
+  <data name="Salutation" xml:space="preserve">
+    <value>Hi</value>
+  </data>
+  <data name="SendingMessage" xml:space="preserve">
+    <value>sending message</value>
+  </data>
+  <data name="SendingMessageFailed" xml:space="preserve">
+    <value>message delivery failed</value>
+  </data>
+  <data name="SendingMessageSucceeded" xml:space="preserve">
+    <value>message sent</value>
+  </data>
+  <data name="SendingReply" xml:space="preserve">
+    <value>sending reply</value>
+  </data>
+  <data name="SendingReplySucceeded" xml:space="preserve">
+    <value>reply sent</value>
+  </data>
+  <data name="SentBy" xml:space="preserve">
+    <value>sent by</value>
+  </data>
+  <data name="you" xml:space="preserve">
+    <value>you</value>
+  </data>
+  <data name="pin" xml:space="preserve">
+    <value>pin</value>
+  </data>
+  <data name="pinned" xml:space="preserve">
+    <value>pinned</value>
+  </data>
+  <data name="unpin" xml:space="preserve">
+    <value>unpin</value>
+  </data>
+  <data name="NewMessage" xml:space="preserve">
+    <value>new message</value>
+  </data>
+  <data name="NewMessages" xml:space="preserve">
+    <value>new messages</value>
+  </data>
+  <data name="CancelButtonText" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="LoginFailed" xml:space="preserve">
+    <value>Login failed</value>
+  </data>
+  <data name="LoginNew" xml:space="preserve">
+    <value>Log in to WarmShowers.org</value>
+  </data>
+  <data name="OKButtonText" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>password</value>
+  </data>
+  <data name="updateButtonText" xml:space="preserve">
+    <value>update</value>
+  </data>
+  <data name="Username" xml:space="preserve">
+    <value>username</value>
+  </data>
+  <data name="AboutAddress" xml:space="preserve">
+    <value>map address</value>
+  </data>
+  <data name="AboutComments" xml:space="preserve">
+    <value>comments</value>
+  </data>
+  <data name="AboutGeneral" xml:space="preserve">
+    <value />
+  </data>
+  <data name="AboutPhone" xml:space="preserve">
+    <value>call mobile</value>
+  </data>
+  <data name="AboutSMS" xml:space="preserve">
+    <value>text (sms)</value>
+  </data>
+  <data name="AboutWeb" xml:space="preserve">
+    <value>visit</value>
+  </data>
+  <data name="ago" xml:space="preserve">
+    <value>ago</value>
+  </data>
+  <data name="day" xml:space="preserve">
+    <value>day</value>
+  </data>
+  <data name="days" xml:space="preserve">
+    <value>days</value>
+  </data>
+  <data name="FromCurrentLocation" xml:space="preserve">
+    <value>from my location</value>
+  </data>
+  <data name="HostingHeaderBikeShop" xml:space="preserve">
+    <value>distance to nearest bike shop</value>
+  </data>
+  <data name="HostingHeaderCampground" xml:space="preserve">
+    <value>distance to nearest campgrnd</value>
+  </data>
+  <data name="HostingHeaderHostMayOffer" xml:space="preserve">
+    <value>this host may offer</value>
+  </data>
+  <data name="HostingHeaderMaxCyclists" xml:space="preserve">
+    <value>maximum guests</value>
+  </data>
+  <data name="HostingHeaderMotel" xml:space="preserve">
+    <value>distance to nearest hotel/motel</value>
+  </data>
+  <data name="hour" xml:space="preserve">
+    <value>hour</value>
+  </data>
+  <data name="hours" xml:space="preserve">
+    <value>hours</value>
+  </data>
+  <data name="LastAccess" xml:space="preserve">
+    <value>Last access</value>
+  </data>
+  <data name="MemberFor" xml:space="preserve">
+    <value>Member for</value>
+  </data>
+  <data name="minute" xml:space="preserve">
+    <value>minute</value>
+  </data>
+  <data name="minutes" xml:space="preserve">
+    <value>minutes</value>
+  </data>
+  <data name="second" xml:space="preserve">
+    <value>second</value>
+  </data>
+  <data name="seconds" xml:space="preserve">
+    <value>seconds</value>
+  </data>
+  <data name="week" xml:space="preserve">
+    <value>week</value>
+  </data>
+  <data name="weeks" xml:space="preserve">
+    <value>weeks</value>
+  </data>
+  <data name="year" xml:space="preserve">
+    <value>year</value>
+  </data>
+  <data name="years" xml:space="preserve">
+    <value>years</value>
+  </data>
+  <data name="RegisterButtonText" xml:space="preserve">
+    <value>Sign Up</value>
+  </data>
+  <data name="WarmShowersUri" xml:space="preserve">
+    <value>www.warmshowers.org</value>
+    <comment>Do not localize</comment>
+  </data>
+  <data name="AboutDevelopedBy" xml:space="preserve">
+    <value>Warm Showers for Windows Phone was developed by Kurt Ziegler.</value>
+  </data>
+  <data name="FacebookFollow" xml:space="preserve">
+    <value>Follow us on Facebook.</value>
+  </data>
+  <data name="FacebookUri" xml:space="preserve">
+    <value>https://www.facebook.com/groups/135049549858210/</value>
+    <comment>Do not localize</comment>
+  </data>
+  <data name="TwitterFollow" xml:space="preserve">
+    <value>Follow us on Twitter.</value>
+  </data>
+  <data name="TwitterUri" xml:space="preserve">
+    <value>https://twitter.com/#!/warmshowers</value>
+    <comment>Do not localize</comment>
+  </data>
+  <data name="ItemGuest" xml:space="preserve">
+    <value>Guest</value>
+  </data>
+  <data name="ItemHost" xml:space="preserve">
+    <value>Host</value>
+  </data>
+  <data name="ItemNegative" xml:space="preserve">
+    <value>Negative</value>
+  </data>
+  <data name="ItemNeutral" xml:space="preserve">
+    <value>Neutral</value>
+  </data>
+  <data name="ItemOther" xml:space="preserve">
+    <value>Other</value>
+  </data>
+  <data name="ItemPositive" xml:space="preserve">
+    <value>Positive</value>
+  </data>
+  <data name="ItemTraveling" xml:space="preserve">
+    <value>Met Traveling</value>
+  </data>
+  <data name="SendingFeedback" xml:space="preserve">
+    <value>sending feedback</value>
+  </data>
+  <data name="SendingFeedbackFailed" xml:space="preserve">
+    <value>feedback delivery failed</value>
+  </data>
+  <data name="SendingFeedbackSucceeded" xml:space="preserve">
+    <value>feedback sent</value>
+  </data>
+  <data name="SendingFeedbackTooShort" xml:space="preserve">
+    <value>body must be at least 10 words</value>
+  </data>
+  <data name="AboutDescription" xml:space="preserve">
+    <value>The Warm Showers Community is a free worldwide hospitality exchange for touring cyclists.  People who are willing to host touring cyclists sign up and provide their contact information, and may occasionally have someone stay with them and share great stories and a drink.  This mobile application is intended primarily for cyclists out on tour, to help them identify, locate, and coordinate with potential hosts.</value>
+  </data>
+  <data name="LoggedInAs" xml:space="preserve">
+    <value>Logged in as</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Version</value>
+  </data>
+  <data name="limit" xml:space="preserve">
+    <value>limit</value>
+  </data>
+  <data name="Memory" xml:space="preserve">
+    <value>Memory</value>
+  </data>
+  <data name="peak" xml:space="preserve">
+    <value>peak</value>
+  </data>
+  <data name="used" xml:space="preserve">
+    <value>used</value>
+  </data>
+  <data name="me" xml:space="preserve">
+    <value>me</value>
+  </data>
+  <data name="viewHostMenuText" xml:space="preserve">
+    <value>view profile on warmshowers.org</value>
+  </data>
+  <data name="BodyBlank" xml:space="preserve">
+    <value>body cannot be blank</value>
+  </data>
+  <data name="SubjectBlank" xml:space="preserve">
+    <value>subject cannot be blank</value>
+  </data>
+  <data name="AboutContactMe" xml:space="preserve">
+    <value>Contact kurt@zighome.net.</value>
+  </data>
+  <data name="AlertMessageFormNoNetwork" xml:space="preserve">
+    <value>You can compose a message, edits will be saved.  Then go back and try sending again when connected to a network.</value>
+  </data>
+  <data name="StatusNoNetwork" xml:space="preserve">
+    <value>Compose msg.  Try again.</value>
+  </data>
+  <data name="ToNoNetwork" xml:space="preserve">
+    <value>No Network</value>
+  </data>
+  <data name="AlertMessageFormNotLoggedIn" xml:space="preserve">
+    <value>You can compose a message, edits will be saved.  Then go back, log in, and try sending again when connected to a network.</value>
+  </data>
+  <data name="ToNotLoggedIn" xml:space="preserve">
+    <value>Not Logged In</value>
+  </data>
+  <data name="PinnedListEmptyBody2" xml:space="preserve">
+    <value>Also, a new private message will automatically pin the host from whom it was sent.  Press the update button in the toolbar below to check for new messages.</value>
+  </data>
+  <data name="LoginMenuText" xml:space="preserve">
+    <value>log in</value>
+  </data>
+  <data name="AlertNotLoggedIn" xml:space="preserve">
+    <value>logged out</value>
+  </data>
+  <data name="DisableLocationService" xml:space="preserve">
+    <value>Disable use of location service</value>
+  </data>
+  <data name="EnableLocationService" xml:space="preserve">
+    <value>Enable use of location service</value>
+  </data>
+  <data name="NearbyListLocationDisabledBody" xml:space="preserve">
+    <value>To see nearby hosts, open the about... page and press "Enable use of location service."</value>
+  </data>
+  <data name="NearbyListLocationDisabledHeader" xml:space="preserve">
+    <value>location svc is disabled</value>
+  </data>
+  <data name="PrivacyPolicy" xml:space="preserve">
+    <value>Privacy policy: Location service is used to display nearby hosts.</value>
+  </data>
+  <data name="NewMessagesReceived" xml:space="preserve">
+    <value>new messages</value>
+  </data>
+  <data name="uriPrefix" xml:space="preserve">
+    <value>https://</value>
+    <comment>Do not localize</comment>
+  </data>
+</root>
