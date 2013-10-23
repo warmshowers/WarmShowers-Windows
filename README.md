@@ -13,6 +13,8 @@ The WP7 app is currently in maintenance mode, no new features are planned.  WP8 
 
 Visit www.warmshowers.org for more information about the entire Warm Showers ecosystem.
 
+For bugs, please submit a new github issue or comment on an existing one.
+
 For questions, comments, or interest in further development of Warm Showers for Windows, contact:
 Kurt Ziegler
 kurt@zighome.net
