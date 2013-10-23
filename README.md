@@ -16,6 +16,7 @@ Visit www.warmshowers.org for more information about the entire Warm Showers eco
 For bugs, please submit a new github issue or comment on an existing one.
 
 For questions, comments, or interest in further development of Warm Showers for Windows, contact:
+
 Kurt Ziegler
 kurt@zighome.net
 
