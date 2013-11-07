@@ -255,10 +255,10 @@
     <value>see current traffic</value>
   </data>
   <data name="unitsMenuTextKm" xml:space="preserve">
-    <value>show distances in km</value>
+    <value>show distance in km</value>
   </data>
   <data name="unitsMenuTextMi" xml:space="preserve">
-    <value>show distances in mi</value>
+    <value>show distance in mi</value>
   </data>
   <data name="webSiteMenuText" xml:space="preserve">
     <value>visit warmshowers.org</value>
@@ -537,10 +537,10 @@
     <value>logged out</value>
   </data>
   <data name="DisableLocationService" xml:space="preserve">
-    <value>Disable use of location service</value>
+    <value>Disable use of location service.</value>
   </data>
   <data name="EnableLocationService" xml:space="preserve">
-    <value>Enable use of location service</value>
+    <value>Enable use of location service.</value>
   </data>
   <data name="NearbyListLocationDisabledBody" xml:space="preserve">
     <value>To see nearby hosts, open the about... page and press "Enable use of location service."</value>
@@ -557,5 +557,35 @@
   <data name="uriPrefix" xml:space="preserve">
     <value>https://</value>
     <comment>Do not localize</comment>
+  </data>
+  <data name="centerHostContextMenuLabel" xml:space="preserve">
+    <value>center on host location</value>
+  </data>
+  <data name="AboutURL" xml:space="preserve">
+    <value>view web site</value>
+  </data>
+  <data name="HostingHeaderLanguagesSpoken" xml:space="preserve">
+    <value>languages spoken</value>
+  </data>
+  <data name="HostingHeaderPreferred_notice" xml:space="preserve">
+    <value>preferred notice</value>
+  </data>
+  <data name="RevisionsUri" xml:space="preserve">
+    <value>https://github.com/klzig/WarmShowers-Windows/blob/master/WarmShowers/WSWP7/Release%20History.md</value>
+  </data>
+  <data name="debugEnabled" xml:space="preserve">
+    <value>debug mode is enabled</value>
+  </data>
+  <data name="debugMenuText" xml:space="preserve">
+    <value>turn on debug mode</value>
+  </data>
+  <data name="debugButtonText" xml:space="preserve">
+    <value>send debug</value>
+  </data>
+  <data name="debugEmailAddress" xml:space="preserve">
+    <value>kurt@zighome.net</value>
+  </data>
+  <data name="debugSubject" xml:space="preserve">
+    <value>WS debug</value>
   </data>
 </root>

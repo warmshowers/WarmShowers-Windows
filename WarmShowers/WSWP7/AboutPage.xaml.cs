@@ -21,7 +21,7 @@ namespace WSApp
             Username.Text = WebResources.LoggedInAs + " " + App.settings.myUsername;
             ContactMe.Text = WebResources.AboutContactMe;
             Memory.Visibility = System.Windows.Visibility.Collapsed;    // Hide memory info for public release
-            Version.Text = WebResources.Version + " " + XDocument.Load("WMAppManifest.xml").Root.Element("App").Attribute("Version").Value + ".";
+            Version.Content = WebResources.Version + " " + XDocument.Load("WMAppManifest.xml").Root.Element("App").Attribute("Version").Value + ".";
             Privacy.Text = "\n" + WebResources.PrivacyPolicy;
             if (App.settings.isLocationEnabled)
             {
@@ -77,6 +77,13 @@ namespace WSApp
                 App.locationService.Start();
                 LocationOnOff.Content = WebResources.DisableLocationService;
             }
+        }
+
+        private void Version_Click(object sender, RoutedEventArgs e)
+        {
+            WebBrowserTask task = new WebBrowserTask();
+            task.Uri = new Uri(WebResources.RevisionsUri);
+            task.Show();
         }
     }
 }

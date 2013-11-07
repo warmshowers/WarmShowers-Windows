@@ -139,6 +139,18 @@ namespace WSApp.ViewModel
         }
 
 
+        /// <summary>
+        /// Label for center on host context menu
+        /// </summary>
+        /// <returns></returns>
+        public string CenterHostContextMenuLabel
+        {
+            get
+            {
+                return WebResources.centerHostContextMenuLabel;
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(String propertyName)
         {

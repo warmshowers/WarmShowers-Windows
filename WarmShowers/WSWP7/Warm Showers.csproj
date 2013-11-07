@@ -193,6 +193,7 @@
     <None Include="Properties\WMAppManifest.xml">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Release History.md" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ApplicationIcon.png">
@@ -201,6 +202,7 @@
     <Content Include="Background.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Images\Appbar\appbar.attach.rest.png" />
     <Content Include="Images\Appbar\appbar.directions.png" />
     <Content Include="Images\Appbar\appbar.feedback.png" />
     <Content Include="Images\Appbar\appbar.filter.png" />
@@ -230,7 +232,6 @@
     <Content Include="Images\Pushpins\unpinned.png" />
     <Content Include="Images\About\twitter.png" />
     <Content Include="Images\About\WSBanner.png" />
-    <Content Include="Release History.txt" />
     <Content Include="SplashScreenImage.jpg" />
     <Content Include="Images\Appbar\appbar.Delete.png" />
   </ItemGroup>

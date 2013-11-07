@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Microsoft.Phone.Controls.Maps;
 using System.Device.Location;
 using System.Runtime.Serialization.Json;
+using System.Globalization;
 using WSApp.DataModel;
 
 namespace WSApp.DataModel
@@ -43,7 +44,10 @@ namespace WSApp.DataModel
         public delegate void WP8KickstartCallback();
         private WP8KickstartCallback wP8KickstartCallback;
 
-
+        // Debug
+        public delegate void QueryExtentCallback(double lat, double lon, double north, double south, double east, double west, int limit);
+        private QueryExtentCallback queryExtentCallback;
+        public static string debugPayload = "";
 
         /// <summary>
         /// Request type
@@ -117,6 +121,13 @@ namespace WSApp.DataModel
         {
             wP8KickstartCallback += func;
         }
+
+        // Debug
+        public void RegisterQueryExtentCallback(QueryExtentCallback func)
+        {
+            queryExtentCallback += func;
+        }
+
 
         public class RequestManager
         {
@@ -536,6 +547,12 @@ namespace WSApp.DataModel
             string uri = WebResources.uriPrefix + WebResources.WarmShowersUri + "/services/rest/hosts/by_location";
             if (false == requestManager.RequestStart(Request.getHosts)) return false;
 
+            // Debug
+            if (App.ViewModelMain.debug)
+            {
+                debugPayload = "URI\n" + uri;
+            }
+
             try
             {
                 HttpWebRequest httpReq = (HttpWebRequest)HttpWebRequest.Create(new Uri(uri));
@@ -572,15 +589,35 @@ namespace WSApp.DataModel
                 return;
             }
 
-            string parms =  "centerlon=" + locCenter.Longitude + "&centerlat=" + locCenter.Latitude +
-                            "&minlat=" + locRect.South + "&minlon=" + locRect.West +
-                            "&maxlat=" + locRect.North + "&maxlon=" + locRect.East + "&limit=" + App.nearby.viewportCache.resultLimit;
-                
+
+            CultureInfo culture = new CultureInfo("");
+            NumberFormatInfo numInfo = culture.NumberFormat;
+            string parms =  "centerlon=" + locCenter.Longitude.ToString(numInfo) + "&centerlat=" + locCenter.Latitude.ToString(numInfo) +
+                            "&minlat=" + locRect.South.ToString(numInfo) + "&minlon=" + locRect.West.ToString(numInfo) +
+                            "&maxlat=" + locRect.North.ToString(numInfo) + "&maxlon=" + locRect.East.ToString(numInfo) + "&limit=" + App.nearby.viewportCache.resultLimit.ToString(numInfo);
+               
             try
             {
                 HttpWebRequest httpReq = (HttpWebRequest)result.AsyncState;
                 Stream postStream = httpReq.EndGetRequestStream(result);
                 byte[] postBytes = System.Text.Encoding.UTF8.GetBytes(parms);
+
+                // Debug
+                if (App.ViewModelMain.debug)
+                {
+                    Deployment.Current.Dispatcher.BeginInvoke(() =>
+                    {
+                        App.webService.queryExtentCallback(locCenter.Latitude, locCenter.Longitude, locRect.North, locRect.South, locRect.East, locRect.West, App.nearby.viewportCache.resultLimit);
+                    });
+
+                    string junk = "";
+                    for (int i = 0; i < postBytes.Length; i++)
+                    {
+                        junk += Convert.ToChar(postBytes[i]);
+                    }
+                    debugPayload += "\n\nPARAMS\n" + junk;
+                }
+
 
                 // Write to the request stream
                 postStream.Write(postBytes, 0, postBytes.Length);
@@ -611,8 +648,15 @@ namespace WSApp.DataModel
                 if (null != response)
                 {
                     Stream stream = response.GetResponseStream();
-//                    StreamReader sr = new StreamReader(stream);
-//                    string junk = sr.ReadToEnd();
+                    StreamReader sr = new StreamReader(stream);
+
+                    // Debug
+                    if (App.ViewModelMain.debug)
+                    {
+                        string junk = sr.ReadToEnd();
+                        debugPayload += "\n\nRESPONSE\n" + junk;
+                    }
+
                     var serializer = new DataContractJsonSerializer(typeof(Hosts.Hosts_Result));
                     App.nearby.hosts.hosts_Result = (Hosts.Hosts_Result)serializer.ReadObject(stream);
                     stream.Close();

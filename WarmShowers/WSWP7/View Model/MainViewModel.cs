@@ -219,6 +219,27 @@ namespace WSApp.ViewModel
             this.IsDataLoaded = true;
         }
 
+        private bool _debug = false;
+        /// <summary>
+        /// Flag to indicate we're in debug mode
+        /// </summary>
+        /// <returns></returns>
+        public bool debug
+        {
+            get
+            {
+                return _debug;
+            }
+            set
+            {
+                if (value != _debug)
+                {
+                    _debug = value;
+                    NotifyPropertyChanged("debug");
+                }
+            }
+        }
+
         private double _zoom = 11.0;
         /// <summary>
         /// Text to indicate if the nearby list is filtered
@@ -254,18 +275,40 @@ namespace WSApp.ViewModel
             set
             {
                 GreatCircle gc = new GreatCircle();
-                if (!gc.isEqual(value,  App.nearby.mapCenter))
+                if (!gc.isEqual(value, App.nearby.mapCenter))
                 {   // User changed map location so no longer centered on me
                     if (!isMeButtonPressPending) App.nearby.isCenteredOnMe = false;
                     App.nearby.mapCenter = value;
                     NotifyPropertyChanged("mapLocation");
                 }
-
             }
         }
 
-        public void newMeLocation()
+        /// <summary>
+        /// Me center
+        /// </summary>
+        /// <returns></returns>
+        public GeoCoordinate meLocation
+        {
+            get
+            {
+                return App.nearby.meCenter;
+            }
+
+            set
+            {
+                if (value != App.nearby.meCenter)
+                {
+                    App.nearby.meCenter = value;
+                    NotifyPropertyChanged("meLocation");
+                }
+            }
+        }
+
+        public void newMeLocation(GeoCoordinate loc)
         {   // This is invoked by location service through UpdateCallback
+            meLocation = loc;
+
             if (App.nearby.isCenteredOnMe)
             {   // GPS changed map location so remains centered on me
                 App.nearby.mapCenter = App.nearby.meCenter;

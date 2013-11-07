@@ -126,7 +126,108 @@ namespace WSApp.DataModel
 
             return uName;
         }
-          
+
+        /// <summary>
+        /// Extract latitude
+        /// </summary>
+        public double getLat(int uId)
+        {
+            double lat = 0.0;
+            bool success = false;
+
+            // First try to get it from results
+            if (null != this.hosts.hosts_Result)
+            {
+                try
+                {
+                    var accountQuery =
+                        from account in this.hosts.hosts_Result.accounts
+                        where (account.uid == uId)
+                        select account.latitude;
+
+                    lat = accountQuery.First();
+                    success = true;
+                }
+                catch (InvalidOperationException e)
+                {   // No match yields exception
+                    System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
+                    System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
+                }
+            }
+
+            // Next try to get it from store of pinned users
+            if (!success)
+            {
+                HostProfile host;
+                if (App.pinned.pinnedProfiles.ContainsKey(uId))
+                {
+                    if (App.pinned.pinnedProfiles.TryGetValue(uId, out host))
+                    {   // Name should be in the stored profile, extract it
+                        if (null != host.profile.users_Result)
+                        {
+                            if (null != host.profile.users_Result.users)
+                            {
+                                lat = host.profile.users_Result.users[0].user.latitude;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return lat;
+        }
+
+
+        /// <summary>
+        /// Extract longitude
+        /// </summary>
+        public double getLon(int uId)
+        {
+            double lon = 0.0;
+            bool success = false;
+
+            // First try to get it from results
+            if (null != this.hosts.hosts_Result)
+            {
+                try
+                {
+                    var accountQuery =
+                        from account in this.hosts.hosts_Result.accounts
+                        where (account.uid == uId)
+                        select account.longitude;
+
+                    lon = accountQuery.First();
+                    success = true;
+                }
+                catch (InvalidOperationException e)
+                {   // No match yields exception
+                    System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
+                    System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
+                }
+            }
+
+            // Next try to get it from store of pinned users
+            if (!success)
+            {
+                HostProfile host;
+                if (App.pinned.pinnedProfiles.ContainsKey(uId))
+                {
+                    if (App.pinned.pinnedProfiles.TryGetValue(uId, out host))
+                    {   // Name should be in the stored profile, extract it
+                        if (null != host.profile.users_Result)
+                        {
+                            if (null != host.profile.users_Result.users)
+                            {
+                                lon = host.profile.users_Result.users[0].user.longitude;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return lon;
+        }
+
         /// <summary>
         /// Extract full user name
         /// </summary>
@@ -408,14 +509,29 @@ namespace WSApp.DataModel
                         App.ViewModelHost.aboutItems.Add(new AboutItemViewModel() { Line1 = WebResources.AboutPhone, Line2 = user.mobilephone, Type = AboutItemViewModel.AboutType.phone });
                         App.ViewModelHost.aboutItems.Add(new AboutItemViewModel() { Line1 = WebResources.AboutSMS, Line2 = user.mobilephone, Type = AboutItemViewModel.AboutType.sms });
                     }
+                    if (!string.IsNullOrEmpty(user.URL))
+                    {
+                        App.ViewModelHost.aboutItems.Add(new AboutItemViewModel() { Line1 = WebResources.AboutURL, Line2 = user.URL, Type = AboutItemViewModel.AboutType.web });
+                    }
                     if (!string.IsNullOrEmpty(user.picture))
                     {
                         App.ViewModelHost.aboutItems.Add(new AboutItemViewModel() { Picture = "https://www.warmshowers.org/" + user.picture, Type = AboutItemViewModel.AboutType.picture });
                     }
                     App.ViewModelHost.aboutItems.Add(new AboutItemViewModel() { Line1 = WebResources.AboutComments, Line2 = user.comments, Type = AboutItemViewModel.AboutType.comments });
-                    App.ViewModelHost.hostingItems.Add(new HostingItemViewModel() { Line1 = WebResources.HostingHeaderMaxCyclists, Line2 = user.maxcyclists });
 
                     App.ViewModelHost.hostingItems.Clear();
+                    if (!string.IsNullOrEmpty(user.languagesspoken))
+                    {
+                        App.ViewModelHost.hostingItems.Add(new HostingItemViewModel() { Line1 = WebResources.HostingHeaderLanguagesSpoken, Line2 = user.languagesspoken });
+                    }
+                    if (!string.IsNullOrEmpty(user.preferred_notice))
+                    {
+                        App.ViewModelHost.hostingItems.Add(new HostingItemViewModel() { Line1 = WebResources.HostingHeaderPreferred_notice, Line2 = user.preferred_notice });
+                    }
+                    if (!string.IsNullOrEmpty(user.maxcyclists))
+                    {
+                        App.ViewModelHost.hostingItems.Add(new HostingItemViewModel() { Line1 = WebResources.HostingHeaderMaxCyclists, Line2 = user.maxcyclists });
+                    }
                     if (!string.IsNullOrEmpty(user.bikeshop))
                     {
                         App.ViewModelHost.hostingItems.Add(new HostingItemViewModel() { Line1 = WebResources.HostingHeaderBikeShop, Line2 = user.bikeshop });

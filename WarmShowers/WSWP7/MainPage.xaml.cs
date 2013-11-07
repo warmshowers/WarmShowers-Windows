@@ -39,8 +39,13 @@ namespace WSApp
         private ApplicationBarMenuItem aerialViewMenu = null;
         private ApplicationBarMenuItem roadViewMenu = null;
 
+        // Debug
+        private ApplicationBarMenuItem debugMenu = null;
+        private ApplicationBarIconButton debugButton = null;
+        private Microsoft.Phone.Controls.Maps.MapPolygon rBorder = null;
+        private Microsoft.Phone.Controls.Maps.MapPolygon rFill = null;
+
         private Pushpin selectedPin = null;     // Keep around so we can delete it when next pin is selected
-        private Pushpin mePushpin;
         private LastVisiblePage lastVisiblePage;
         private bool firstMapClick = true;
         private bool loginCanceledByUser = false;
@@ -89,17 +94,16 @@ namespace WSApp
             App.webService.RegisterLogoutCompleteCallback(new WebService.LogoutCompleteCallback(PromptForCredentials));
             App.webService.RegisterWP8KickstartCallback(new WebService.WP8KickstartCallback(ClickMe));
             App.webService.RegisterLoginCompleteCallback(new WebService.LoginCompleteCallback(loginCompleteCallback));
+            App.locationService.RegisterUpdateCallback(new LocationServices.LocationService.UpdateCallback(newMeLocation));
+
+            // debug
+            App.webService.RegisterQueryExtentCallback(new WebService.QueryExtentCallback(PaintQueryExtent));
 
             // Set the data context of the listbox control to the sample data
             DataContext = App.ViewModelMain;
             this.Loaded += new RoutedEventHandler(MainPage_Loaded);
 
             setAppBar();
-
-            mePushpin = new Pushpin();
-            mePushpin.Template = (ControlTemplate)Application.Current.Resources["MePushpinTemplate"];
-            mePushpin.Visibility = Visibility.Collapsed;
-            myMap.Children.Add(mePushpin);
 
             if (String.IsNullOrEmpty(App.settings.myUsername) && String.IsNullOrEmpty(App.settings.myPassword))
             {
@@ -184,9 +188,9 @@ namespace WSApp
             this.SplashScreen.Visibility = Visibility.Collapsed;
             this.MainPivot.Visibility = Visibility.Visible;
             App.nearby.isCenteredOnMe = true;
-            LoginInfo.Visibility = PannedInfo.Visibility = LocationInfo.Visibility = NetworkInfo.Visibility = Visibility.Visible;
+            LoginInfo.Visibility  = PannedInfo.Visibility  = LocationInfo.Visibility  = NetworkInfo.Visibility  = Visibility.Visible;
             LoginInfo2.Visibility = PannedInfo2.Visibility = LocationInfo2.Visibility = NetworkInfo2.Visibility = Visibility.Visible;
-            LoginInfo3.Visibility = NetworkInfo3.Visibility = Visibility.Visible;
+            LoginInfo3.Visibility = PannedInfo3.Visibility = LocationInfo3.Visibility = NetworkInfo3.Visibility = Visibility.Visible;
 
             App.nearby.loadHosts();     // Load hosts we pulled from isolated storage
         }
@@ -228,6 +232,16 @@ namespace WSApp
                     updateButton.Text = WebResources.updateButtonText;
                     updateButton.Click += ApplicationBarIconButton_Click_Update;
                 }
+
+                // Debug
+                if (null == debugButton)
+                {   // Create me button
+                    debugButton = new ApplicationBarIconButton(new Uri("/Images/Appbar/appbar.attach.rest.png", UriKind.Relative));
+                    debugButton.Text = WebResources.debugButtonText;
+                    debugButton.Click += ApplicationBarIconButton_Click_Debug;
+                }
+
+
                 //                if (null == searchButton)
                 //                {   // Create search button
                 //                    searchButton = new ApplicationBarIconButton(new Uri("/Images/Appbar/appbar.magnify.png", UriKind.Relative));
@@ -282,6 +296,13 @@ namespace WSApp
                     aboutMenu.Text = WebResources.aboutMenuText;
                     aboutMenu.Click += aboutMenu_Click;
                 }
+
+                if (null == debugMenu)
+                {   // Create menu item to toggle debug mode   
+                    debugMenu = new ApplicationBarMenuItem();
+                    debugMenu.Text = WebResources.debugMenuText;
+                    debugMenu.Click += debugMenu_Click;
+                }
             }
 
             // Assuming we start up on pivot Todo: is this always true?
@@ -307,6 +328,9 @@ namespace WSApp
                 ApplicationBar.MenuItems.Add(unitsMenu);
                 ApplicationBar.MenuItems.Add(logoutMenu);
                 ApplicationBar.MenuItems.Add(aboutMenu);
+
+                // Debug.  Uncomment this to enable debug mode.
+                //ApplicationBar.MenuItems.Add(debugMenu);   
             }
             else if (MainPivot.Visibility != Visibility.Visible && lastVisiblePage != LastVisiblePage.mappage)
             {   // Map visible
@@ -318,6 +342,12 @@ namespace WSApp
                 ApplicationBar.MenuItems.Clear();
                 ApplicationBar.MenuItems.Add(aerialViewMenu);
                 ApplicationBar.MenuItems.Add(roadViewMenu);
+
+                // Debug
+                if (App.ViewModelMain.debug)
+                {
+                    ApplicationBar.Buttons.Add(debugButton);    // Todo: comment out for public release
+                }
             }
         }
 
@@ -349,7 +379,12 @@ namespace WSApp
             {   // Pressing me button when map not panned forces getHosts request, bypassing viewPort cache
                 GeoCoordinate loc = App.nearby.meCenter;
                 if (null != loc)
-                {
+                {   // There are a couple reasons why LocationRect could be out of sync with meCenter:
+                    //  Reason 1: User hit me button on map and then quickly switched to nearby view.  
+                    //  Reason 2: User physically moved and the new meCenter is outside locationRect
+                    myMap.SetView(loc, oldZoomLevel);
+                    App.ViewModelMain.mapLocation = loc;
+                    ViewChangeEnd();
                     App.nearby.viewportCache.getHostsForce(loc);
                 }
             }
@@ -376,6 +411,16 @@ namespace WSApp
         private void ApplicationBarIconButton_Click_Me(object sender, EventArgs e)
         {
             ClickMe();
+        }
+
+        // Debug
+        private void ApplicationBarIconButton_Click_Debug(object sender, EventArgs e)
+        {   // Send debug info back to creator
+            EmailComposeTask emailComposeTask = new EmailComposeTask();
+            emailComposeTask.To = WebResources.debugEmailAddress;
+            emailComposeTask.Subject = WebResources.debugSubject;
+            emailComposeTask.Body = WebService.debugPayload;
+            emailComposeTask.Show();
         }
 
         private void ApplicationBarIconButton_Click_Search(object sender, EventArgs e)
@@ -493,8 +538,18 @@ namespace WSApp
                 }
 
                 ub = new TextBox();
+
+                // Use sensible keyboard layout for entering an email-style username
+                InputScope Keyboard = new InputScope();
+                InputScopeName ScopeName = new InputScopeName();
+                ScopeName.NameValue = InputScopeNameValue.EmailUserName;
+                Keyboard.Names.Add(ScopeName);
+                ub.InputScope = Keyboard;  
+            
                 ub.Text = un;
+
                 pb = new PasswordBox();
+
                 pb.Password = pw;
                 pb.KeyDown += new KeyEventHandler(pb_KeyDown);
                 panel1.Children.Add(textblock3);
@@ -575,6 +630,48 @@ namespace WSApp
 
         #region Menu Handlers
 
+        private void centerNearbyItem_Click(object sender, RoutedEventArgs e)
+        {
+            // Get host location
+            NearbyItemViewModel vm = (NearbyItemViewModel)(sender as MenuItem).DataContext;
+            int uId = vm.userID;
+            centerItem_Click(uId);
+        }
+
+        private void centerPinnedItem_Click(object sender, RoutedEventArgs e)
+        {
+            // Get host location
+            PinnedItemViewModel vm = (PinnedItemViewModel)(sender as MenuItem).DataContext;
+            int uId = vm.userID;
+            centerItem_Click(uId);
+        }
+
+        private void centerItem_Click(int uId)
+        {
+
+            double lat = App.nearby.getLat(uId);
+            double lon = App.nearby.getLon(uId);
+
+            // Center map on host location
+            double oldZoomLevel = myMap.ZoomLevel;
+
+            App.ViewModelMain.isMeButtonPressPending = true;        
+
+            App.nearby.isCenteredOnMe = false;
+            GeoCoordinate loc = new GeoCoordinate();
+            loc.Latitude = lat;
+            loc.Longitude = lon;
+            App.nearby.mapCenter = loc;
+            myMap.SetView(loc, oldZoomLevel);
+
+            if (this.MapPage.Visibility == Visibility.Collapsed)
+            {   // Map processing disabled when page not visible, do it manually
+                const int startTime = 1000;     // Milliseconds until first timer callback 
+                const int periodTime = 500;    // Milliseconds between timer callback 
+                t = new Timer(timer_ViewChangeEnd, t, startTime, periodTime);
+            }
+        }
+
         private void pinNearbyItem_Click(object sender, RoutedEventArgs e)
         {
             NearbyItemViewModel vm = (NearbyItemViewModel)(sender as MenuItem).DataContext;
@@ -645,6 +742,12 @@ namespace WSApp
         private void roadViewMenu_Click(object sender, EventArgs e)
         {
             myMap.Mode = new RoadMode();
+        }
+
+        private void debugMenu_Click(object sender, EventArgs e)
+        {
+            App.ViewModelMain.debug = true;
+            debugMenu.Text = WebResources.debugEnabled; 
         }
 
         private void aboutMenu_Click(object sender, EventArgs e)
@@ -769,13 +872,65 @@ namespace WSApp
                 MapInitializationComplete();
             }
 
+
             // Show me position on map
-            mePushpin.Location = App.nearby.meCenter;
+            if (null != App.nearby.meCenter)
+            {
+                mePushpin.Location = App.nearby.meCenter;
 
-            App.nearby.locationRect = myMap.TargetBoundingRectangle;
+                // Hack to ensure current location is shown on top of other pushpins
+                myMap.Children.Remove(mePushpin);
+                myMap.Children.Add(mePushpin);
 
-//    App.nearby.myMap = myMap;
-            App.nearby.viewportCache.getHosts(); 
+                if (App.nearby.isCenteredOnMe)      
+                {   // Dealing with some initialization nonsense on WP8
+                    if (!App.nearby.viewportCache.isInside(App.nearby.meCenter, myMap.TargetBoundingRectangle))
+                    {
+                        myMap.SetView(App.nearby.meCenter, App.ViewModelMain.zoom);
+                        App.ViewModelMain.mapLocation = App.nearby.meCenter;
+                    }
+                }
+                App.nearby.locationRect = myMap.TargetBoundingRectangle;
+            }
+
+            App.nearby.viewportCache.getHosts();
+
+        }
+
+        private void PaintQueryExtent(double lat, double lon, double north, double south, double east, double west, int limit)
+        {   // Debug.  Paint query extent on the map.
+            if (null != rBorder)
+            {
+                myMap.Children.Remove(rBorder);
+            }
+
+            if (null != rFill)
+            {
+                myMap.Children.Remove(rFill);
+            }
+
+            rBorder = new Microsoft.Phone.Controls.Maps.MapPolygon();
+            rBorder.Stroke = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Red);
+            rBorder.StrokeThickness = 10;
+            rBorder.Opacity = 0.8;
+
+            rFill = new Microsoft.Phone.Controls.Maps.MapPolygon();
+            rFill.Fill = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Blue);
+            rFill.StrokeThickness = 10;
+            rFill.Opacity = 0.1;
+
+            var collection = new Microsoft.Phone.Controls.Maps.LocationCollection();
+            collection.Add(new GeoCoordinate(north, east));
+            collection.Add(new GeoCoordinate(south, east));
+            collection.Add(new GeoCoordinate(south, west));
+            collection.Add(new GeoCoordinate(north, west));
+
+            rBorder.Locations = collection;
+            rFill.Locations = collection;
+
+            // Add the polyline to the map
+            myMap.Children.Add(rBorder);
+            myMap.Children.Add(rFill);
         }
 
         #endregion
@@ -810,6 +965,20 @@ namespace WSApp
             Pushpin pin = sender as Pushpin;
             DisplayHost((int)pin.Tag);
         }
+
+        void newMeLocation(GeoCoordinate loc)
+        {
+            // This callback function is a hack because I could never get the binding to work in MainViewModel-- the map never calls meLocation.  
+            // May be a bug in the map control, see http://social.msdn.microsoft.com/Forums/en-US/683db702-6d57-4fdd-8ba5-25e37fd362eb/wpf-bing-maps-control-maplayerposition-not-updated?forum=bingmapssilverlightwpfcontrols
+
+            mePushpin.Location = loc;
+
+            // Hack to ensure current location is shown on top of other pushpins
+            myMap.Children.Remove(mePushpin);
+            myMap.Children.Add(mePushpin);
+        }
+
         #endregion
+
     }
 }

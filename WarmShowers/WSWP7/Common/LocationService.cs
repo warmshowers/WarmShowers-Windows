@@ -21,7 +21,7 @@ namespace WSApp.LocationServices
         private static string _locationStatus;
         public delegate void AlertCallback(string alert);
         private AlertCallback alertCallback;
-        public delegate void UpdateCallback();
+        public delegate void UpdateCallback(GeoCoordinate loc);
         private UpdateCallback updateCallback;
         private bool disposed = false; // to detect redundant calls      
     
@@ -137,9 +137,8 @@ namespace WSApp.LocationServices
         void watcher_PositionChanged(object sender, GeoPositionChangedEventArgs<GeoCoordinate> e)
         {
             _currentLocation = e.Position.Location;
-            App.nearby.meCenter = _currentLocation;
 
-            updateCallback();
+            updateCallback(_currentLocation);
         }
     }
 }

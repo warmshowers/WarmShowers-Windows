@@ -46,6 +46,7 @@
                                     <toolkit:ContextMenuService.ContextMenu>
                                         <toolkit:ContextMenu>
                                             <toolkit:MenuItem Header="{Binding ContextMenuLabel}" Click="pinNearbyItem_Click"/>
+                                            <toolkit:MenuItem Header="{Binding CenterHostContextMenuLabel}" Click="centerNearbyItem_Click"/>
                                         </toolkit:ContextMenu>
                                     </toolkit:ContextMenuService.ContextMenu>
                                     <TextBlock Text="{Binding Name}" TextWrapping="NoWrap"   Style="{StaticResource PhoneTextExtraLargeStyle}"/>
@@ -81,6 +82,7 @@
                                     <toolkit:ContextMenuService.ContextMenu>
                                         <toolkit:ContextMenu>
                                             <toolkit:MenuItem Header="unpin" Click="UnpinPinnedItem_Click"/>
+                                            <toolkit:MenuItem Header="{Binding CenterHostContextMenuLabel}" Click="centerPinnedItem_Click"/>
                                         </toolkit:ContextMenu>
                                     </toolkit:ContextMenuService.ContextMenu>
                                     <TextBlock Text="{Binding Name}" TextWrapping="NoWrap"  Style="{StaticResource PhoneTextExtraLargeStyle}"/>
@@ -91,8 +93,8 @@
                     </ListBox>
                     <StackPanel Orientation="Horizontal" Grid.Row="1">
                         <TextBlock x:Name="LoginInfo3"  Text="{Binding loginAlert}" Margin="8,0,8,2" TextWrapping="NoWrap" Foreground="#FFD61818" Width="115" Style="{StaticResource PhoneTextTitle3Style}" Visibility="Collapsed"/>
-                        <TextBlock x:Name="PannedInfo3"  Text="" Margin="8,0,8,2" TextWrapping="NoWrap" Foreground="#FFD61818"  Width="80" Style="{StaticResource PhoneTextTitle3Style}" Visibility="Visible"/>
-                        <TextBlock x:Name="LocationInfo3"  Text="" Margin="8,0,8,2" TextWrapping="NoWrap" Foreground="#FFD61818" Width="115" Style="{StaticResource PhoneTextTitle3Style}" Visibility="Visible"/>
+                        <TextBlock x:Name="PannedInfo3"  Text="{Binding pannedAlert}" Margin="8,0,8,2" TextWrapping="NoWrap" Foreground="#FFD61818"  Width="80" Style="{StaticResource PhoneTextTitle3Style}" Visibility="Collapsed"/>
+                        <TextBlock x:Name="LocationInfo3"  Text="{Binding locationAlert}" Margin="8,0,8,2" TextWrapping="NoWrap" Foreground="#FFD61818" Width="115" Style="{StaticResource PhoneTextTitle3Style}" Visibility="Collapsed"/>
                         <TextBlock x:Name="NetworkInfo3"  Text="{Binding networkAlert}" Margin="8,0,8,2" TextWrapping="NoWrap" Foreground="#FFD61818" Width="110" Style="{StaticResource PhoneTextTitle3Style}" Visibility="Collapsed"/>
                     </StackPanel>
                 </Grid>
@@ -109,7 +111,10 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <Maps:Map x:Name="myMap"  Visibility="Visible" IsEnabled="True" Grid.Row="0" Center="{Binding mapLocation, Mode=TwoWay}" ZoomLevel="{Binding zoom, Mode=TwoWay}" CredentialsProvider="{Binding CredentialsProvider}" ViewChangeEnd="myMap_ViewChangeEnd" ZoomBarVisibility="Visible" LogoVisibility="Collapsed">
+            <Maps:Map x:Name="myMap"  Visibility="Visible" IsEnabled="True" Grid.Row="0" Center="{Binding mapLocation, Mode=OneWay}" ZoomLevel="{Binding zoom, Mode=TwoWay}" CredentialsProvider="{Binding CredentialsProvider}" ViewChangeEnd="myMap_ViewChangeEnd" ZoomBarVisibility="Visible" LogoVisibility="Collapsed">
+                <!--Switch to binding for pushpin location if binding bug is ever fixed in map control (see comment in newMeLocation() in MainPage.xaml.cs)-->
+                <!--<Maps:Pushpin x:Name ="mePushpin" Location="{Binding meLocation}" Template="{StaticResource MePushpinTemplate}" Visibility="Collapsed" />-->
+                <Maps:Pushpin x:Name ="mePushpin" Template="{StaticResource MePushpinTemplate}" Visibility="Collapsed" />
                 <Maps:MapItemsControl ItemsSource="{Binding mapItems}"  >
                     <Maps:MapItemsControl.ItemTemplate>
                         <DataTemplate>

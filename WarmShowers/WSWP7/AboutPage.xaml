@@ -44,7 +44,7 @@
             <TextBlock Name="DevelopedBy" Text="Warm Showers for Windows Phone was developed by Kurt Ziegler" HorizontalAlignment="Center" TextWrapping="NoWrap"  VerticalAlignment="Bottom"  FontSize="16"/>
             <TextBlock Name="ContactMe" Text="Contact me at kurt@zighome.net." HorizontalAlignment="Center" TextWrapping="NoWrap"  VerticalAlignment="Bottom"  FontSize="16"/>
             <TextBlock Name="Memory" Text="Memory: " HorizontalAlignment="Left" TextWrapping="NoWrap"  VerticalAlignment="Bottom" Width="470" FontSize="16"/>
-            <TextBlock Name="Version" Text="Version 0.1.0.0" HorizontalAlignment="Center" TextWrapping="NoWrap"  VerticalAlignment="Bottom" FontSize="16"/>
+            <HyperlinkButton Name="Version" Content="Version 0.1.0.0" HorizontalAlignment="Center"  FontSize="16" Click="Version_Click"/>
             <TextBlock Name="Privacy" Text="Privacy policy: location service used to locate nearby hosts." HorizontalAlignment="Center" TextWrapping="NoWrap"  VerticalAlignment="Bottom" FontSize="16"/>
             <HyperlinkButton Name="LocationOnOff" Content="Disable use of location service" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="16" Click="LocationOnOff_Click"/>
         </StackPanel>

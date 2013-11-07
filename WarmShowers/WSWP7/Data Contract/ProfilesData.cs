@@ -118,6 +118,15 @@ namespace WSApp.DataModel
 
             [DataMember]
             public string picture { get; set; }
+
+            [DataMember]
+            public string languagesspoken { get; set; }
+
+            [DataMember]
+            public string URL { get; set; }
+
+            [DataMember]
+            public string preferred_notice { get; set; }
  
         }
 

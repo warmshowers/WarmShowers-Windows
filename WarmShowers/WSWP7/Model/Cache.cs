@@ -133,7 +133,7 @@ namespace WSApp.DataModel
             return callSuccessful;
         }
 
-        private bool isInside(GeoCoordinate center, LocationRect bounds)
+        public bool isInside(GeoCoordinate center, LocationRect bounds)
         {
             if ((null == center) || (null == bounds)) return false;
             if (center.Latitude < bounds.South) return false;
@@ -149,6 +149,12 @@ namespace WSApp.DataModel
         /// </summary>
         public void getHosts()
         {
+            if (App.ViewModelMain.debug)
+            {   // Debug: Bypass viewport cache. 
+                getHostsForce(App.nearby.mapCenter);
+                return;
+            }
+
             Zoomed zoom = Zoomed.noChange;
             LocationRect newViewport = App.nearby.locationRect;
             GreatCircle gc = new GreatCircle();
