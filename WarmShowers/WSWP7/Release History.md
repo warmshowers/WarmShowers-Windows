@@ -3,7 +3,7 @@
 
 Warm Showers for Windows Phone
 
-v1.2.0.0 
+v1.2.0.0 7Nov2013
 * Fixed bug that prevented discovery of hosts when phone was set to some non-English regional settings. Issue 19.
 * Added display of languages spoken, website URL, max cyclists, and preferred notice. Issue 21.
 * Added context menu item to center on selected host. Issue 22.
