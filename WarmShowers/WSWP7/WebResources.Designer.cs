@@ -1060,7 +1060,7 @@ namespace WSApp {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://github.com/klzig/WarmShowers-Windows/blob/master/WarmShowers/WSWP7/Release%20History.md.
+        ///   Looks up a localized string similar to https://github.com/warmshowers/WarmShowers-Windows/blob/master/WarmShowers/WSWP7/Release%20History.md.
         /// </summary>
         internal static string RevisionsUri {
             get {
