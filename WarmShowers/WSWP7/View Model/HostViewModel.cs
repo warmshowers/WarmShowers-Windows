@@ -162,7 +162,7 @@ namespace WSApp.ViewModel
                 {
                     if (user.uid == uId)
                     {
-                        App.nearby.loadProfileCommon(user.latitude, user.longitude, user.street, user.city, user.province, user.country, user.postal_code);
+                        App.nearby.loadProfileCommon(user.latitude, user.longitude, user.street, user.additional, user.city, user.province, user.country, user.postal_code);
                         break;
                     }
                 }
@@ -170,8 +170,8 @@ namespace WSApp.ViewModel
 
             this.hostingItems.Clear();
             this.hostingItems.Add(new HostingItemViewModel() { Line1 = WebResources.loading });
- 
-            if (null != App.nearby.host.profile.users_Result)
+
+            if (null != App.nearby.host.profile.user_Result)
             {   // We may have current profile cached, try to load it
                 App.nearby.loadProfile();
             }

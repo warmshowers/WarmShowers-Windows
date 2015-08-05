@@ -3,6 +3,14 @@
 
 Warm Showers for Windows Phone
 
+v1.3.0.0 4Aug2015
+* Upgraded to support new Drupal 7 web service requirements.  Issue 46.
+  PRIOR VERSIONS WILL NOT WORK AFTER OCTOBER 2015
+* Added display of Home Phone, Work Phone, and additional address field to host About info.  Issue 48.
+* Added 'get all' button to 'pinned' page, to pin all hosts with private messages.  Useful for re-pinning hosts visited earlier in the trip, for further correspondence or to provide feedback.  Issue 47.
+* Changed 'map address' text to 'map coordinates' for lat/lon presentation.  Issue 40.
+* Added license to source repository on github.  Issue 41.
+
 v1.2.0.0 7Nov2013
 * Fixed bug that prevented discovery of hosts when phone was set to some non-English regional settings. Issue 19.
 * Added display of languages spoken, website URL, max cyclists, and preferred notice. Issue 21.

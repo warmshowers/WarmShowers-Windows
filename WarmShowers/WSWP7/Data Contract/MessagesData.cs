@@ -26,7 +26,8 @@ namespace WSApp.DataModel
         {
             if (null != newMessages)
             {
-                messages_result = new Messages_result(newMessages.messages_result);
+//                messages_result = new Messages_result(newMessages.messages_result);
+                messages_result = newMessages.messages_result;
             }
             else
             {

@@ -59,7 +59,7 @@ namespace WSApp
             String id = NavigationContext.QueryString["id"];
             int.TryParse(id, out uId);
 
-            if (null == App.nearby.host.profile.users_Result)
+            if (null == App.nearby.host.profile.user_Result)
             {   // If we have the hosts cached but didn't get the profile response back, all we have is the user id, which isn't good enough to send a message
                 if (!String.IsNullOrEmpty(App.settings.myUsername) && !String.IsNullOrEmpty(App.settings.myPassword))
                 {
@@ -76,7 +76,7 @@ namespace WSApp
             }
             else
             {
-                To.Text = App.nearby.host.profile.users_Result.users[0].user.name;
+                To.Text = App.nearby.host.profile.user_Result.name;
             } 
            
             App.networkService.IsNetworkAvailable();        // Force update of network status

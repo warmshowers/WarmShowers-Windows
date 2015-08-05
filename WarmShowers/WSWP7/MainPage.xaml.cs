@@ -32,6 +32,7 @@ namespace WSApp
         private ApplicationBarIconButton mapButton = null; 
 //        private ApplicationBarIconButton searchButton = null;
         private ApplicationBarIconButton updateButton = null;
+        private ApplicationBarIconButton allButton = null;
         private ApplicationBarMenuItem webSiteMenu = null;
         private ApplicationBarMenuItem aboutMenu = null;
         private ApplicationBarMenuItem unitsMenu = null;
@@ -231,6 +232,12 @@ namespace WSApp
                     updateButton = new ApplicationBarIconButton(new Uri("/Images/Appbar/appbar.refresh.png", UriKind.Relative));
                     updateButton.Text = WebResources.updateButtonText;
                     updateButton.Click += ApplicationBarIconButton_Click_Update;
+                }
+                if (null == allButton)
+                {   // Create update button
+                    allButton = new ApplicationBarIconButton(new Uri("/Images/Appbar/appbar.at.png", UriKind.Relative));
+                    allButton.Text = WebResources.allButtonText;
+                    allButton.Click += ApplicationBarIconButton_Click_All;
                 }
 
                 // Debug
@@ -433,7 +440,12 @@ namespace WSApp
 
         private void ApplicationBarIconButton_Click_Update(object sender, EventArgs e)
         {
-            WebService.GetMessages();
+            WebService.GetMessages(false);
+        }
+
+        private void ApplicationBarIconButton_Click_All(object sender, EventArgs e)
+        {
+            WebService.GetMessages(true);
         }
 
         private void SearchBox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
@@ -776,6 +788,7 @@ namespace WSApp
 
                 case (int) pivotPage.recent:
                     ApplicationBar.Buttons.Add(updateButton);
+                    ApplicationBar.Buttons.Add(allButton);
                     break;
             }
             if (null == p)
@@ -822,7 +835,7 @@ namespace WSApp
             {
                 if (uId != App.nearby.selectedUid)
                 {   // User changed, saved data is invalid
-                    App.nearby.host.profile.users_Result = null;
+                    App.nearby.host.profile.user_Result = null;
                     App.nearby.host.feedback.recommendations_Result = null;
                     App.nearby.host.messages.messages_result = null;
                     App.nearby.messageThread.message_result = null;

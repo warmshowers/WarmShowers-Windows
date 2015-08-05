@@ -187,42 +187,54 @@
   </data>
   <data name="Apr" xml:space="preserve">
     <value>Apr</value>
+    <comment>Abbreviation for April</comment>
   </data>
   <data name="Aug" xml:space="preserve">
     <value>Aug</value>
+    <comment>Abbreviation for August</comment>
   </data>
   <data name="Dec" xml:space="preserve">
     <value>Dec</value>
+    <comment>Abbreviation for December</comment>
   </data>
   <data name="Feb" xml:space="preserve">
     <value>Feb</value>
+    <comment>Abbreviation for February</comment>
   </data>
   <data name="Jan" xml:space="preserve">
     <value>Jan</value>
+    <comment>Abbreviation for January</comment>
   </data>
   <data name="Jul" xml:space="preserve">
     <value>Jul</value>
+    <comment>Abbreviation for July</comment>
   </data>
   <data name="Jun" xml:space="preserve">
     <value>Jun</value>
+    <comment>Abbreviation for June</comment>
   </data>
   <data name="Mar" xml:space="preserve">
     <value>Mar</value>
+    <comment>Abbreviation for March</comment>
   </data>
   <data name="May" xml:space="preserve">
     <value>May</value>
+    <comment>Abbreviation for May</comment>
   </data>
   <data name="none" xml:space="preserve">
     <value>none</value>
   </data>
   <data name="Nov" xml:space="preserve">
     <value>Nov</value>
+    <comment>Abbreviation for November</comment>
   </data>
   <data name="Oct" xml:space="preserve">
     <value>Oct</value>
+    <comment>Abbreviation for October</comment>
   </data>
   <data name="Sep" xml:space="preserve">
     <value>Sep</value>
+    <comment>Abbreviation for September</comment>
   </data>
   <data name="by" xml:space="preserve">
     <value>by</value>
@@ -333,7 +345,7 @@
     <value>password</value>
   </data>
   <data name="updateButtonText" xml:space="preserve">
-    <value>update</value>
+    <value>get new</value>
   </data>
   <data name="Username" xml:space="preserve">
     <value>username</value>
@@ -528,7 +540,7 @@
     <value>Not Logged In</value>
   </data>
   <data name="PinnedListEmptyBody2" xml:space="preserve">
-    <value>Also, a new private message will automatically pin the host from whom it was sent.  Press the update button in the toolbar below to check for new messages.</value>
+    <value>Also, a new private message will automatically pin the host from whom it was sent.  Press the 'get new' button in the toolbar below to search again for hosts with unread messages.  Press the 'get all' button to pin hosts with any messages.  'get all' is useful for re-pinning hosts visited earlier in the trip, for further correspondence or to provide feedback.</value>
   </data>
   <data name="LoginMenuText" xml:space="preserve">
     <value>log in</value>
@@ -587,5 +599,17 @@
   </data>
   <data name="debugSubject" xml:space="preserve">
     <value>WS debug</value>
+  </data>
+  <data name="AboutCoordinates" xml:space="preserve">
+    <value>map coordinates</value>
+  </data>
+  <data name="AboutHomePhone" xml:space="preserve">
+    <value>call home</value>
+  </data>
+  <data name="AboutWorkPhone" xml:space="preserve">
+    <value>call work</value>
+  </data>
+  <data name="allButtonText" xml:space="preserve">
+    <value>get all</value>
   </data>
 </root>

@@ -28,7 +28,8 @@ namespace WSApp.DataModel
         {
             if (null != newFeedback)
             {
-                recommendations_Result = new Recommendations_result(newFeedback.recommendations_Result);
+//                recommendations_Result = new Recommendations_result(newFeedback.recommendations_Result);
+                recommendations_Result = newFeedback.recommendations_Result;
             }
             else
             {

@@ -163,12 +163,10 @@ namespace WSApp.DataModel
                 {
                     if (App.pinned.pinnedProfiles.TryGetValue(uId, out host))
                     {   // Name should be in the stored profile, extract it
-                        if (null != host.profile.users_Result)
+                        if (null != host.profile.user_Result)
                         {
-                            if (null != host.profile.users_Result.users)
-                            {
-                                lat = host.profile.users_Result.users[0].user.latitude;
-                            }
+                            lat = host.profile.user_Result.latitude;
+
                         }
                     }
                 }
@@ -214,12 +212,10 @@ namespace WSApp.DataModel
                 {
                     if (App.pinned.pinnedProfiles.TryGetValue(uId, out host))
                     {   // Name should be in the stored profile, extract it
-                        if (null != host.profile.users_Result)
+                        if (null != host.profile.user_Result)
                         {
-                            if (null != host.profile.users_Result.users)
-                            {
-                                lon = host.profile.users_Result.users[0].user.longitude;
-                            }
+
+                            lon = host.profile.user_Result.longitude;
                         }
                     }
                 }
@@ -266,17 +262,14 @@ namespace WSApp.DataModel
 
                         if (string.IsNullOrEmpty(uName))
                         {   // Name should be in the stored profile, extract it
-                            if (null != host.profile.users_Result)
+                            if (null != host.profile.user_Result)
                             {
-                                if (null != host.profile.users_Result.users)
-                                {
-                                    uName = host.profile.users_Result.users[0].user.fullname;
+                                uName = host.profile.user_Result.fullname;
 
-                                    // Fix up the pinned item in the store
-                                    App.pinned.pinnedProfiles.Remove(uId);
-                                    host.name = uName;
-                                    App.pinned.pinnedProfiles.Add(uId, host);
-                                }
+                                // Fix up the pinned item in the store
+                                App.pinned.pinnedProfiles.Remove(uId);
+                                host.name = uName;
+                                App.pinned.pinnedProfiles.Add(uId, host);
                             }
                         }
                     }
@@ -304,9 +297,9 @@ namespace WSApp.DataModel
         {
             string offer = "users_Result is null";
 
-            if (null != this.host.profile.users_Result)
+            if (null != this.host.profile.user_Result)
             {
-                Profile.User2 user = this.host.profile.users_Result.users[0].user;
+                Profile.User user = this.host.profile.user_Result;
                 offer = "";
                 bool firstLine = true;
                 if (user.bed == "1")
@@ -452,16 +445,24 @@ namespace WSApp.DataModel
         /// <summary>
         /// Update UI with results common to both Hosts and Profile
         /// </summary>
-        public void loadProfileCommon(double lat, double lon, string street, string city, string province, string country, string postal_code)
+        public void loadProfileCommon(double lat, double lon, string street, string additional, string city, string province, string country, string postal_code)
         {
 
             string addr1 = lat + " " + lon;
             string addr2line2 = street;
+            if (!string.IsNullOrEmpty(additional))
+            {
+                if (addr2line2 != "")
+                {
+                    addr2line2 += '\n';
+                }
+                addr2line2 += additional;
+            }
             string addr2line3 = city + ", " + province.ToUpper() + ", " + country.ToUpper() + " " + postal_code;
 
             Deployment.Current.Dispatcher.BeginInvoke(() =>
             {
-                App.ViewModelHost.aboutItems.Add(new AboutItemViewModel() { Line1 = WebResources.AboutAddress, Line2 = addr1, Type = AboutItemViewModel.AboutType.address});
+                App.ViewModelHost.aboutItems.Add(new AboutItemViewModel() { Line1 = WebResources.AboutCoordinates, Line2 = addr1, Type = AboutItemViewModel.AboutType.address});
                 if (!string.IsNullOrEmpty(addr2line2))
                 {
                     App.ViewModelHost.aboutItems.Add(new AboutItemViewModel()
@@ -474,15 +475,15 @@ namespace WSApp.DataModel
                 }
             });
         }
-
+        
         /// <summary>
         /// Update UI with profile results
         /// </summary>
         public void loadProfile()
         {
-            if (null != host.profile.users_Result.users)  // cache may be incomplete
+            if (null != host.profile.user_Result)  // cache may be incomplete
             {
-                Profile.User2 user = host.profile.users_Result.users[0].user;
+                Profile.User user = host.profile.user_Result;
                 GeoCoordinate loc = new GeoCoordinate();
                 loc.Latitude = user.latitude;
                 loc.Longitude = user.longitude;
@@ -500,7 +501,7 @@ namespace WSApp.DataModel
                     });
                 });
 
-                loadProfileCommon(user.latitude, user.longitude, user.street, user.city, user.province, user.country, user.postal_code);
+                loadProfileCommon(user.latitude, user.longitude, user.street, user.additional, user.city, user.province, user.country, user.postal_code);
 
                 Deployment.Current.Dispatcher.BeginInvoke(() =>
                 {
@@ -509,13 +510,23 @@ namespace WSApp.DataModel
                         App.ViewModelHost.aboutItems.Add(new AboutItemViewModel() { Line1 = WebResources.AboutPhone, Line2 = user.mobilephone, Type = AboutItemViewModel.AboutType.phone });
                         App.ViewModelHost.aboutItems.Add(new AboutItemViewModel() { Line1 = WebResources.AboutSMS, Line2 = user.mobilephone, Type = AboutItemViewModel.AboutType.sms });
                     }
+                    if (!string.IsNullOrEmpty(user.homephone) && user.homephone != user.mobilephone)
+                    {
+                        App.ViewModelHost.aboutItems.Add(new AboutItemViewModel() { Line1 = WebResources.AboutHomePhone, Line2 = user.homephone, Type = AboutItemViewModel.AboutType.phone });
+                    }
+                    if (!string.IsNullOrEmpty(user.workphone) && user.workphone != user.mobilephone && user.workphone != user.homephone)
+                    {
+                        App.ViewModelHost.aboutItems.Add(new AboutItemViewModel() { Line1 = WebResources.AboutWorkPhone, Line2 = user.workphone, Type = AboutItemViewModel.AboutType.phone });
+                    }
                     if (!string.IsNullOrEmpty(user.URL))
                     {
                         App.ViewModelHost.aboutItems.Add(new AboutItemViewModel() { Line1 = WebResources.AboutURL, Line2 = user.URL, Type = AboutItemViewModel.AboutType.web });
                     }
+//                    App.ViewModelHost.aboutItems.Add(new AboutItemViewModel() { Line1 = WebResources.AboutHostUrl, Line2 = "https://www.warmshowers.org/user/" + user.uid, Type = AboutItemViewModel.AboutType.web });
                     if (!string.IsNullOrEmpty(user.picture))
                     {
                         App.ViewModelHost.aboutItems.Add(new AboutItemViewModel() { Picture = "https://www.warmshowers.org/" + user.picture, Type = AboutItemViewModel.AboutType.picture });
+ //                       App.ViewModelHost.aboutItems.Add(new AboutItemViewModel() { Picture = user.profile_image_profile_picture, Type = AboutItemViewModel.AboutType.picture });
                     }
                     App.ViewModelHost.aboutItems.Add(new AboutItemViewModel() { Line1 = WebResources.AboutComments, Line2 = user.comments, Type = AboutItemViewModel.AboutType.comments });
 
@@ -742,7 +753,7 @@ namespace WSApp.DataModel
 
                         long date = message.timestamp;
                         string author = message.author.name;
-                        if (author != host.profile.users_Result.users[0].user.name) author = WebResources.me;
+                        if (author != host.profile.user_Result.name) author = WebResources.me;
                         string header = WebResources.SentBy + " " + author + " " + WebResources.On + " " + gc.date_mmmddyyyy(date);
                         if (1 == message.is_new) header += " - " + WebResources.New;
 

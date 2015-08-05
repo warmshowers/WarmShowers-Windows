@@ -250,7 +250,7 @@ namespace WSApp
         private void ApplicationBarIconButton_Click_Map(object sender, EventArgs e)
         {
             BingMapsTask bingMapsTask = new BingMapsTask();
-            bingMapsTask.SearchTerm = App.nearby.host.profile.users_Result.users[0].user.latitude.ToString() + " " + App.nearby.host.profile.users_Result.users[0].user.longitude.ToString();
+            bingMapsTask.SearchTerm = App.nearby.host.profile.user_Result.latitude.ToString() + " " + App.nearby.host.profile.user_Result.longitude.ToString();
             bingMapsTask.ZoomLevel = 15;
             bingMapsTask.Show();
         }

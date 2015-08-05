@@ -183,7 +183,7 @@ namespace WSApp.DataModel
         /// </summary>
         public void refreshHost()
         {
-            int uId = App.nearby.host.profile.users_Result.users[0].user.uid;
+            int uId = App.nearby.host.profile.user_Result.uid;
 
             if (isPinned(uId))
             {

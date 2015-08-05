@@ -34,8 +34,8 @@ namespace WSApp
             int.TryParse(id, out uId);
 
             // Can't get to this if network down, so OK to assume we have profile response
-            App.ViewModelMessage.username = App.nearby.host.profile.users_Result.users[0].user.fullname + " (" + 
-                                            App.nearby.host.profile.users_Result.users[0].user.name + ")";
+            App.ViewModelMessage.username = App.nearby.host.profile.user_Result.fullname + " (" +
+                                            App.nearby.host.profile.user_Result.name + ")";
             App.networkService.IsNetworkAvailable();        // Force update of network status
         }
 

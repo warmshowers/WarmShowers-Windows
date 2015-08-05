@@ -14,6 +14,7 @@ namespace WSApp.DataModel
 {
     public sealed class WebService
     {
+        #region Initialization
         // Singleton object
         static readonly WebService _instance = new WebService();
         public static WebService Instance
@@ -25,8 +26,10 @@ namespace WSApp.DataModel
         }
 
         private static CookieContainer cookieJar;
+        private static string sessionToken;
         public static RequestManager requestManager = new RequestManager();
         private static int threadId;
+        private static bool getAllMessages;
         public delegate void LoginCompleteCallback();
         private LoginCompleteCallback loginCompleteCallback;
         public delegate void LoginFailedCallback(string msg, string un, string pw);
@@ -56,6 +59,7 @@ namespace WSApp.DataModel
         {
             login,
             logout,
+            getToken,
             getHosts,
             getHost,
             getFeedback,
@@ -74,14 +78,14 @@ namespace WSApp.DataModel
             public String name = "";
         }
 
-
-
         // Constructor
         public WebService()
         {
             cookieJar = new CookieContainer();
         }
+    #endregion
 
+        #region Callback Registration
         public void RegisterLoginCompleteCallback(LoginCompleteCallback func)
         {
             loginCompleteCallback += func;
@@ -127,8 +131,9 @@ namespace WSApp.DataModel
         {
             queryExtentCallback += func;
         }
+        #endregion
 
-
+        #region RequestManager
         public class RequestManager
         {
             enum RequestState
@@ -136,6 +141,7 @@ namespace WSApp.DataModel
                 idle,
                 loggingIn,
                 loginDialogOpen,
+                gettingToken,
                 gettingHosts,
                 gettingHost,
                 gettingFeedback,
@@ -172,7 +178,7 @@ namespace WSApp.DataModel
                             t = null;
 //                            NewMessageTimer = new Timer(RequestTimerCallback, t, NewMessageStartTime, NewMessagePeriodTime);
                                             // With the 'check message' button, I don't think we need timer to check for new messages
-                            GetMessages();  // Check once after initial hosts request in lieu of timer
+                            GetMessages(false);  // Check once after initial hosts request in lieu of timer
                         }
                         
  //                       GetMessages();  // Poll for new messages
@@ -212,6 +218,9 @@ namespace WSApp.DataModel
                         break;
                     case Request.logout:
                         break;
+                    case Request.getToken:
+                        requestState = RequestState.gettingToken;
+                        break;
                     case Request.getHosts:
                         if (RequestState.idle != requestState && RequestState.gettingHosts != requestState && RequestState.gettingHost != requestState) return false;       // Todo:  Do we really need this check?
                         if (null != t) t.Dispose();
@@ -248,7 +257,7 @@ namespace WSApp.DataModel
             }
 
             /// <summary>
-            /// State machine entry point for complted request
+            /// State machine entry point for completed request
             /// </summary>
             public void RequestComplete(Request request)
             {
@@ -262,16 +271,22 @@ namespace WSApp.DataModel
 
                 switch (request)
                 {
-                    case Request.login:
-                        Deployment.Current.Dispatcher.BeginInvoke(() => { App.webService.loginCompleteCallback(); });                       
+                    case Request.login:                  
                         if (RequestState.loggingIn == requestState)
                         {   // Chain requests
-                            requestState = RequestState.gettingHosts;
-                            App.nearby.viewportCache.getHosts();   // Todo:  Fake names for screen shots
+                            GetToken();
                         }
                         break;
                     case Request.logout:
                         Deployment.Current.Dispatcher.BeginInvoke(() => { App.webService.logoutCompleteCallback(WebResources.LoginNew, "", ""); });
+                        break;
+                    case Request.getToken:
+                       Deployment.Current.Dispatcher.BeginInvoke(() => { App.webService.loginCompleteCallback(); });
+                       if (RequestState.gettingToken == requestState)
+                        {   // Chain requests
+                            requestState = RequestState.gettingHosts;
+                            App.nearby.viewportCache.getHosts();   // Todo:  Fake names for screen shots
+                        }
                         break;
                     case Request.getHosts:
                         // Last in a chain of requests
@@ -281,14 +296,14 @@ namespace WSApp.DataModel
                         if (RequestState.gettingHost == requestState)
                         {   // Chain requests
                             requestState = RequestState.gettingFeedback;
-                            GetFeedback(App.nearby.host.profile.users_Result.users[0].user.uid);
+                            GetFeedback(App.nearby.host.profile.user_Result.uid);
                         }
                         break;
                     case Request.getFeedback:
                         if (RequestState.gettingFeedback == requestState)
                         {   // Chain requests
                             requestState = RequestState.gettingMessages;  
-                            GetMessages();
+                            GetMessages(false);
                         }
                         break;
                     case Request.sendFeedback:
@@ -329,6 +344,7 @@ namespace WSApp.DataModel
                 }
             }
         }
+        #endregion
 
         #region Login
         // POST /services/rest/user/login
@@ -450,6 +466,7 @@ namespace WSApp.DataModel
 
         // POST /services/rest/user/logout
         // Accept: application/json
+        // X-CSRF-Token: sessionToken
         // Response: 1 (if was logged in) or null (if was not logged in) 
 
         /// <summary>
@@ -465,6 +482,7 @@ namespace WSApp.DataModel
                 HttpWebRequest httpReq = (HttpWebRequest)HttpWebRequest.Create(new Uri(uri));
                 httpReq.CookieContainer = cookieJar;
                 httpReq.Accept = "application/json";
+                httpReq.Headers["x-csrf-token"] = sessionToken;
                 httpReq.Method = "POST";                
                 httpReq.BeginGetRequestStream(new AsyncCallback(LogoutPostCallback), httpReq);
             }
@@ -533,9 +551,78 @@ namespace WSApp.DataModel
 
         #endregion
 
+        #region GetToken
+        // Get /services/session/token
+        // Accept: text/plain
+        // Cookie: <session_name>=<sessid>  (obtained from login)`
+
+        /// <summary>
+        /// Get session token, put in X-CSRF-Token for subsequent posts (Drupal 7)
+        /// </summary>
+        public static bool GetToken()
+        {
+            string uri = WebResources.uriPrefix + WebResources.WarmShowersUri + "/services/session/token";
+            requestManager.RequestStart(Request.getToken);
+
+            try
+            {
+                HttpWebRequest httpReq = (HttpWebRequest)HttpWebRequest.Create(new Uri(uri));
+                httpReq.CookieContainer = cookieJar;
+                httpReq.Accept = "text/plain";
+                httpReq.Method = "GET";
+                httpReq.BeginGetResponse(new AsyncCallback(GetTokenResponseCallback), httpReq);
+            }
+            catch (WebException e)
+            {
+                System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
+                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
+                return false;
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
+                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
+                return false;
+            }
+            return true;
+        }
+
+        static void GetTokenResponseCallback(IAsyncResult result)
+        {
+            try
+            {
+                HttpWebRequest httpRequest = (HttpWebRequest)result.AsyncState;
+                WebResponse response = httpRequest.EndGetResponse(result);
+                if (null != response)
+                {
+                    Stream stream = response.GetResponseStream();
+                    StreamReader sr = new StreamReader(stream);
+                    sessionToken = sr.ReadToEnd();
+                    stream.Close();
+                }
+                response.Close();
+            }
+            catch (WebException e)
+            {
+                System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
+                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
+                return;
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
+                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
+                return;
+            }
+            requestManager.RequestComplete(WebService.Request.getToken);
+        }
+
+        #endregion
+
         #region GetHosts
         // POST /services/rest/hosts/by_location
         // Accept: application/json
+        // X-CSRF-Token: sessionToken
         // Cookie: <session_name>=<sessid>  (obtained from login)`
         // Post parameters: minlat maxlat minlon maxlon centerlat centerlon limit 
 
@@ -558,6 +645,7 @@ namespace WSApp.DataModel
                 HttpWebRequest httpReq = (HttpWebRequest)HttpWebRequest.Create(new Uri(uri));
                 httpReq.CookieContainer = cookieJar;
                 httpReq.Accept = "application/json";
+                httpReq.Headers["x-csrf-token"] = sessionToken;
                 httpReq.Method = "POST";
                 // httpReq.ContentType = "application/x-www-form-urlencoded; charset=utf-8";
                 // httpReq.Headers.Set(HttpRequestHeader.AcceptLanguage, "en, fr, de, ja, nl, it, es, pt, pt-PT, da, fi, nb, sv, ko, zh-Hans, zh-Hant, ru, pl, tr, uk, ar, hr, cs, el, he, ro, sk, th, id, ms, en-GB, ca, hu, vi, en-us;q=0.8");
@@ -683,7 +771,8 @@ namespace WSApp.DataModel
         #endregion  
 
         #region GetHost
-        // GET /user/<uid>/json
+        // GET /user/<uid>/json (deprecated)
+        // Get /services/rest/user/<uid>
         // Accept: application/json
         // Cookie: <session_name>=<sessid>  (obtained from login)`
 
@@ -692,7 +781,7 @@ namespace WSApp.DataModel
         /// </summary>
         public static bool GetHost(int uid)
         {
-            string uri = WebResources.uriPrefix + WebResources.WarmShowersUri + "/user/" + uid.ToString() + "/json";
+            string uri = WebResources.uriPrefix + WebResources.WarmShowersUri + "/services/rest/user/" + uid.ToString();
             requestManager.RequestStart(Request.getHost);
 
             try
@@ -727,15 +816,15 @@ namespace WSApp.DataModel
                 if (null != response)
                 {
                     Stream stream = response.GetResponseStream();
-                    StreamReader sr = new StreamReader(stream);
-                    string junk = sr.ReadToEnd();
+                    //StreamReader sr = new StreamReader(stream);
+                    //string junk = sr.ReadToEnd();
 
-                    var serializer = new DataContractJsonSerializer(typeof(Profile.Users_result));
-                    App.nearby.host.profile.users_Result = (Profile.Users_result)serializer.ReadObject(stream);
+                    var serializer = new DataContractJsonSerializer(typeof(Profile.User));
+                    App.nearby.host.profile.user_Result = (Profile.User)serializer.ReadObject(stream);
                     stream.Close();
 
                     // Pull out uId and username 
-                    Profile.User2 user = App.nearby.host.profile.users_Result.users[0].user;
+                    Profile.User user = App.nearby.host.profile.user_Result;
                     App.nearby.host.uId = user.uid;
                     App.nearby.host.name = user.fullname;
 
@@ -838,6 +927,7 @@ namespace WSApp.DataModel
         // (Note: I had to do drush vset services_node_save_button_trust_referral_resource_create "Submit" to make this work) 
         // POST /services/rest/node
         // Accept: application/json
+        // X-CSRF-Token: sessionToken
         // Cookie: <session_name>=<sessid>  (obtained from login)`
         //
         // Post parameters: 
@@ -861,6 +951,7 @@ namespace WSApp.DataModel
                 HttpWebRequest httpReq = (HttpWebRequest)HttpWebRequest.Create(new Uri(uri));
                 httpReq.CookieContainer = cookieJar;
                 httpReq.Accept = "application/json";
+                httpReq.Headers["x-csrf-token"] = sessionToken;
                 httpReq.Method = "POST";
                 httpReq.BeginGetRequestStream(new AsyncCallback(SendFeedbackPostCallback), httpReq);
             }
@@ -952,21 +1043,24 @@ namespace WSApp.DataModel
         #region GetMessages
         // POST /services/rest/message/get
         // Accept: application/json
+        // X-CSRF-Token: sessionToken
         // Cookie: <session_name>=<sessid>  (obtained from login)
 
         /// <summary>
         /// Get all private messages
         /// </summary>
-        public static bool GetMessages()
+        public static bool GetMessages(bool all)
         {
             string uri = WebResources.uriPrefix + WebResources.WarmShowersUri + "/services/rest/message/get";
             requestManager.RequestStart(Request.getMessages);
+            getAllMessages = all;
 
             try
             {
                 HttpWebRequest httpReq = (HttpWebRequest)HttpWebRequest.Create(new Uri(uri));
                 httpReq.CookieContainer = cookieJar;
                 httpReq.Accept = "application/json";
+                httpReq.Headers["x-csrf-token"] = sessionToken;
                 httpReq.Method = "POST";
                 httpReq.BeginGetRequestStream(new AsyncCallback(GetMessagesPostCallback), httpReq);
             }
@@ -1039,15 +1133,15 @@ namespace WSApp.DataModel
                     {
                         foreach (var participant in message.participants)
                         {
-                            if (null != App.nearby.host.profile.users_Result)  // Profile might not be cached yet
+                            if (null != App.nearby.host.profile.user_Result)  // Profile might not be cached yet
                             {
-                                if (participant.uid == App.nearby.host.profile.users_Result.users[0].user.uid)
+                                if (participant.uid == App.nearby.host.profile.user_Result.uid)
                                 {   // Filter all but threads where curent host is a participant
                                     App.nearby.host.messages.messages_result.messages.Add(message);
                                 }
                             }
               
-                            if (0 < message.is_new) // is_new represents the number of new messages, it's not a new message boolean!
+                            if (0 < message.is_new || getAllMessages) // is_new represents the number of new messages, it's not a new message boolean!
                             {   // Aggregate message counts
                                 if (counts.ContainsKey(participant.uid))
                                 {
@@ -1094,6 +1188,7 @@ namespace WSApp.DataModel
         // Send a privatemsg (not replying)
         // POST /services/rest/message/send
         // Accept: application/json
+        // X-CSRF-Token: sessionToken
         // Cookie: <session_name>=<sessid>  (obtained from login)`
 
         // Post parameters: 
@@ -1114,6 +1209,7 @@ namespace WSApp.DataModel
                 HttpWebRequest httpReq = (HttpWebRequest)HttpWebRequest.Create(new Uri(uri));
                 httpReq.CookieContainer = cookieJar;
                 httpReq.Accept = "application/json";
+                httpReq.Headers["x-csrf-token"] = sessionToken;
                 httpReq.Method = "POST";
                 httpReq.BeginGetRequestStream(new AsyncCallback(SendMessagePostCallback), httpReq);
             }
@@ -1201,6 +1297,7 @@ namespace WSApp.DataModel
         #region ReplyMessage
         // POST /services/rest/message/reply
         // Accept: application/json
+        // X-CSRF-Token: sessionToken
         // Cookie: <session_name>=<sessid>  (obtained from login)
         // Parameters thread_id= body= 
 
@@ -1217,6 +1314,7 @@ namespace WSApp.DataModel
                 HttpWebRequest httpReq = (HttpWebRequest)HttpWebRequest.Create(new Uri(uri));
                 httpReq.CookieContainer = cookieJar;
                 httpReq.Accept = "application/json";
+                httpReq.Headers["x-csrf-token"] = sessionToken;
                 httpReq.Method = "POST";
                 httpReq.BeginGetRequestStream(new AsyncCallback(ReplyMessagePostCallback), httpReq);
             }
@@ -1307,10 +1405,11 @@ namespace WSApp.DataModel
         #region GetMessageCount
         // POST /services/rest/message/unreadCount
         // Accept: application/json
+        // X-CSRF-Token: sessionToken
         // Cookie: <session_name>=<sessid>  (obtained from login)
 
         /// <summary>
-        /// Get unread private message count
+        /// Get unread private message count (not currently used)
         /// </summary>
         public static bool GetMessageCount()
         {
@@ -1322,6 +1421,7 @@ namespace WSApp.DataModel
                 HttpWebRequest httpReq = (HttpWebRequest)HttpWebRequest.Create(new Uri(uri));
                 httpReq.CookieContainer = cookieJar;
                 httpReq.Accept = "application/json";
+                httpReq.Headers["x-csrf-token"] = sessionToken;
                 httpReq.Method = "POST";
                 httpReq.BeginGetRequestStream(new AsyncCallback(GetMessageCountPostCallback), httpReq);
             }
@@ -1396,6 +1496,7 @@ namespace WSApp.DataModel
         #region GetMessageThread
         // POST /services/rest/message/getThread
         // Accept: application/json
+        // X-CSRF-Token: sessionToken
         // Cookie: <session_name>=<sessid>  (obtained from login)
         //
         // Parameters thread_id=
@@ -1415,6 +1516,7 @@ namespace WSApp.DataModel
                 HttpWebRequest httpReq = (HttpWebRequest)HttpWebRequest.Create(new Uri(uri));
                 httpReq.CookieContainer = cookieJar;
                 httpReq.Accept = "application/json";
+                httpReq.Headers["x-csrf-token"] = sessionToken;
                 httpReq.Method = "POST";
                 httpReq.BeginGetRequestStream(new AsyncCallback(GetMessageThreadPostCallback), httpReq);
             }
@@ -1504,6 +1606,7 @@ namespace WSApp.DataModel
         #region markThreadRead
         // POST /services/rest/message/getThread
         // Accept: application/json
+        // X-CSRF-Token: sessionToken
         // Cookie: <session_name>=<sessid>  (obtained from login)
         //
         // Parameters thread_id=
@@ -1521,6 +1624,7 @@ namespace WSApp.DataModel
                 HttpWebRequest httpReq = (HttpWebRequest)HttpWebRequest.Create(new Uri(uri));
                 httpReq.CookieContainer = cookieJar;
                 httpReq.Accept = "application/json";
+                httpReq.Headers["x-csrf-token"] = sessionToken;
                 httpReq.Method = "POST";
                 httpReq.BeginGetRequestStream(new AsyncCallback(markThreadReadPostCallback), httpReq);
             }

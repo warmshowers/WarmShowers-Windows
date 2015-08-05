@@ -141,6 +141,9 @@ namespace WSApp.DataModel
             [DataMember]
             public string city { get; set; }
 
+            // This gets filled when complete profile comes down
+            public string additional = "";
+
             [DataMember]
             public string province { get; set; }
 
@@ -156,8 +159,8 @@ namespace WSApp.DataModel
             [DataMember]
             public double longitude { get; set; }
 
-            [DataMember]
-            public int source { get; set; }
+//            [DataMember]
+//            public int source { get; set; }
 
             [DataMember]
             public string notcurrentlyavailable { get; set; }
