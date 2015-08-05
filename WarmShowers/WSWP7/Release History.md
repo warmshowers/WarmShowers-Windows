@@ -3,7 +3,7 @@
 
 Warm Showers for Windows Phone
 
-v1.3.0.0 4Aug2015
+v1.3.0.0 13Sep2015 (estimated)
 * Upgraded to support new Drupal 7 web service requirements.  Issue 46.
   PRIOR VERSIONS WILL NOT WORK AFTER OCTOBER 2015
 * Added display of Home Phone, Work Phone, and additional address field to host About info.  Issue 48.
