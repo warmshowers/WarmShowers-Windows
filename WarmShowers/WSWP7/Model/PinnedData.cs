@@ -194,6 +194,14 @@ namespace WSApp.DataModel
                 }
                 pinnedProfiles.Remove(uId);
                 pinnedProfiles.Add(uId, new HostProfile(App.nearby.host));
+            
+                Deployment.Current.Dispatcher.BeginInvoke(() =>
+                {   // We now have the fullname, update it in pinned UI in main pivot...
+                    App.ViewModelMain.UpdateUsernamePinned(uId, host.name);
+
+                    //... and the header name in host pivot
+                    App.ViewModelHost.username = host.name + " - " + WebResources.pinned;
+                });
             }
         }
     }

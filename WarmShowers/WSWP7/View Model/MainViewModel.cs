@@ -414,6 +414,23 @@ namespace WSApp.ViewModel
         }
 
         /// <summary>
+        /// Change username in pinned list
+        /// </summary>
+        public void UpdateUsernamePinned(int uId, string uName)
+        {
+            GreatCircle gc = new GreatCircle();
+
+            PinnedItemViewModel found = FindItemInPinnedList(uId);
+            if (null != found)
+            {
+                long time = found.Time;
+                int userID = found.userID;
+
+                App.ViewModelMain.pinnedItems.Remove(found);
+                App.ViewModelMain.pinnedItems.Add(new PinnedItemViewModel() { Name = uName, Time = time, userID = userID });
+            }
+        }
+
         /// Update UI to reflect new message received
         /// </summary>
         public void SetNewMessageCount(int uId, int count)
