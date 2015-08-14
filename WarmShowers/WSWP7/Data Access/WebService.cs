@@ -30,6 +30,7 @@ namespace WSApp.DataModel
         public static RequestManager requestManager = new RequestManager();
         private static int threadId;
         private static bool getAllMessages;
+        private static string searchString;
         public delegate void LoginCompleteCallback();
         private LoginCompleteCallback loginCompleteCallback;
         public delegate void LoginFailedCallback(string msg, string un, string pw);
@@ -60,6 +61,7 @@ namespace WSApp.DataModel
             login,
             logout,
             getToken,
+            getUsers,
             getHosts,
             getHost,
             getFeedback,
@@ -142,6 +144,7 @@ namespace WSApp.DataModel
                 loggingIn,
                 loginDialogOpen,
                 gettingToken,
+                gettingUsers,
                 gettingHosts,
                 gettingHost,
                 gettingFeedback,
@@ -221,6 +224,9 @@ namespace WSApp.DataModel
                     case Request.getToken:
                         requestState = RequestState.gettingToken;
                         break;
+                    case Request.getUsers:
+                        requestState = RequestState.gettingUsers;
+                        break;
                     case Request.getHosts:
                         if (RequestState.idle != requestState && RequestState.gettingHosts != requestState && RequestState.gettingHost != requestState) return false;       // Todo:  Do we really need this check?
                         if (null != t) t.Dispose();
@@ -287,6 +293,9 @@ namespace WSApp.DataModel
                             requestState = RequestState.gettingHosts;
                             App.nearby.viewportCache.getHosts();   // Todo:  Fake names for screen shots
                         }
+                        break;
+                    case Request.getUsers:
+                        requestState = RequestState.idle;
                         break;
                     case Request.getHosts:
                         // Last in a chain of requests
@@ -619,6 +628,162 @@ namespace WSApp.DataModel
 
         #endregion
 
+        #region GetUsers
+        // POST /services/rest/hosts/by_keyword
+        // (city/fullname/username/email)
+        // Accept: application/json
+        // X-CSRF-Token: sessionToken
+        // Cookie: <session_name>=<sessid>  (obtained from login)`
+        // Post parameters: keyword offset limit
+
+        /// <summary>
+        /// Get hosts within bounding rectangle
+        /// </summary>
+        public static bool GetUsers(string searchstring)
+        {
+            searchString = searchstring;
+            string uri = WebResources.uriPrefix + WebResources.WarmShowersUri + "/services/rest/hosts/by_keyword";
+            if (false == requestManager.RequestStart(Request.getHosts)) return false;
+
+            // Debug
+            if (App.ViewModelMain.debug)
+            {
+                debugPayload = "URI\n" + uri;
+            }
+
+            try
+            {
+                HttpWebRequest httpReq = (HttpWebRequest)HttpWebRequest.Create(new Uri(uri));
+                httpReq.CookieContainer = cookieJar;
+                httpReq.Accept = "application/json";
+                httpReq.Headers["x-csrf-token"] = sessionToken;
+                httpReq.Method = "POST";
+                // httpReq.ContentType = "application/x-www-form-urlencoded; charset=utf-8";
+                // httpReq.Headers.Set(HttpRequestHeader.AcceptLanguage, "en, fr, de, ja, nl, it, es, pt, pt-PT, da, fi, nb, sv, ko, zh-Hans, zh-Hant, ru, pl, tr, uk, ar, hr, cs, el, he, ro, sk, th, id, ms, en-GB, ca, hu, vi, en-us;q=0.8");
+                // httpReq.UserAgent = "WS/342 (iPod touch; iOS 6.0.1; Scale/2.00)";
+                httpReq.BeginGetRequestStream(new AsyncCallback(GetUsersPostCallback), httpReq);
+            }
+            catch (WebException e)
+            {
+                System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
+                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
+                return false;
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
+                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
+                return false;
+            }
+            return true;
+        }
+
+        static void GetUsersPostCallback(IAsyncResult result)
+        {
+ //           GeoCoordinate locCenter = App.nearby.mapCenter;
+ //           LocationRect locRect = App.nearby.locationRect;
+
+ //           if ((null == locCenter) || (null == locRect))
+ //           {
+ //               return;
+ //           }
+
+
+            CultureInfo culture = new CultureInfo("");
+            NumberFormatInfo numInfo = culture.NumberFormat;
+            //string parms = "centerlon=" + locCenter.Longitude.ToString(numInfo) + "&centerlat=" + locCenter.Latitude.ToString(numInfo) +
+            //                "&minlat=" + locRect.South.ToString(numInfo) + "&minlon=" + locRect.West.ToString(numInfo) +
+            //                "&maxlat=" + locRect.North.ToString(numInfo) + "&maxlon=" + locRect.East.ToString(numInfo) + "&limit=" + App.nearby.viewportCache.resultLimit.ToString(numInfo);
+            string parms = "keyword=" + searchString + "&offset=0" + "&limit=25";
+
+            try
+            {
+                HttpWebRequest httpReq = (HttpWebRequest)result.AsyncState;
+                Stream postStream = httpReq.EndGetRequestStream(result);
+                byte[] postBytes = System.Text.Encoding.UTF8.GetBytes(parms);
+
+                // Debug
+                if (App.ViewModelMain.debug)
+                {
+                    //Deployment.Current.Dispatcher.BeginInvoke(() =>
+                    //{
+                    //    App.webService.queryExtentCallback(locCenter.Latitude, locCenter.Longitude, locRect.North, locRect.South, locRect.East, locRect.West, App.nearby.viewportCache.resultLimit);
+                    //});
+
+                    string junk = "";
+                    for (int i = 0; i < postBytes.Length; i++)
+                    {
+                        junk += Convert.ToChar(postBytes[i]);
+                    }
+                    debugPayload += "\n\nPARAMS\n" + junk;
+                }
+
+
+                // Write to the request stream
+                postStream.Write(postBytes, 0, postBytes.Length);
+                postStream.Close();
+                httpReq.BeginGetResponse(new AsyncCallback(GetUsersResponseCallback), httpReq);
+            }
+            catch (WebException e)
+            {
+                System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
+                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
+                throw;
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
+                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
+                throw;
+            }
+            System.Diagnostics.Debug.WriteLine("GetUsersPostCallback");
+        }
+
+        static void GetUsersResponseCallback(IAsyncResult result)
+        {
+            try
+            {
+                HttpWebRequest httpRequest = (HttpWebRequest)result.AsyncState;
+                WebResponse response = httpRequest.EndGetResponse(result);
+                if (null != response)
+                {
+                    Stream stream = response.GetResponseStream();
+                    StreamReader sr = new StreamReader(stream);
+
+                    // Debug
+                    if (App.ViewModelMain.debug)
+                    {
+                        string junk = sr.ReadToEnd();
+                        debugPayload += "\n\nRESPONSE\n" + junk;
+                    }
+
+                    var serializer = new DataContractJsonSerializer(typeof(Users.Users_result));
+          //          App.nearby.hosts.hosts_Result = (Hosts.Hosts_Result)serializer.ReadObject(stream);
+                    Users.Users_result x = (Users.Users_result)serializer.ReadObject(stream);
+                    stream.Close();
+                    Users.Users_result y = x;
+
+                    App.nearby.loadHosts();
+                }
+                response.Close();
+            }
+            catch (WebException e)
+            {
+                System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
+                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
+                return;
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
+                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
+                return;
+            }
+            requestManager.RequestComplete(WebService.Request.getUsers);
+        }
+
+        #endregion  
+
         #region GetHosts
         // POST /services/rest/hosts/by_location
         // Accept: application/json
@@ -739,11 +904,11 @@ namespace WSApp.DataModel
                     StreamReader sr = new StreamReader(stream);
 
                     // Debug
-                    if (App.ViewModelMain.debug)
-                    {
+              //      if (App.ViewModelMain.debug)
+              //      {
                         string junk = sr.ReadToEnd();
                         debugPayload += "\n\nRESPONSE\n" + junk;
-                    }
+              //      }
 
                     var serializer = new DataContractJsonSerializer(typeof(Hosts.Hosts_Result));
                     App.nearby.hosts.hosts_Result = (Hosts.Hosts_Result)serializer.ReadObject(stream);
@@ -819,12 +984,12 @@ namespace WSApp.DataModel
                     //StreamReader sr = new StreamReader(stream);
                     //string junk = sr.ReadToEnd();
 
-                    var serializer = new DataContractJsonSerializer(typeof(Profile.User));
-                    App.nearby.host.profile.user_Result = (Profile.User)serializer.ReadObject(stream);
+                    var serializer = new DataContractJsonSerializer(typeof(User));
+                    App.nearby.host.profile.user_Result = (User)serializer.ReadObject(stream);
                     stream.Close();
 
                     // Pull out uId and username 
-                    Profile.User user = App.nearby.host.profile.user_Result;
+                    User user = App.nearby.host.profile.user_Result;
                     App.nearby.host.uId = user.uid;
                     App.nearby.host.name = user.fullname;
 

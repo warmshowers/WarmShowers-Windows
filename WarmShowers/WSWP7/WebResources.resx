@@ -183,7 +183,7 @@
     <value>Pinned hosts appear here for quick, offline access.   To manually pin a host, select from the 'nearby' list and press the 'pin' button.  Hosts are automatically pinned when any of the following actions are taken from within the Warm Showers app:  contact or reply to a host, send a text, make a phone call, or map an address. </value>
   </data>
   <data name="PinnedListEmptyHeader" xml:space="preserve">
-    <value>no hosts are pinned</value>
+    <value>no hosts pinned</value>
   </data>
   <data name="Apr" xml:space="preserve">
     <value>Apr</value>
@@ -611,5 +611,11 @@
   </data>
   <data name="allButtonText" xml:space="preserve">
     <value>get all</value>
+  </data>
+  <data name="FoundListEmptyBody" xml:space="preserve">
+    <value>Press the search button in the toolbar below to search for Warm Showers members by username, full name, city, or email address.  Once found they can be pinned for future reference.  25 members are retrieved at a time, scrolling to the bottom of the list will trigger the next fetch of 25 members.  Members are found regardless of availability for hosting.</value>
+  </data>
+  <data name="FoundListEmptyHeader" xml:space="preserve">
+    <value>no hosts found</value>
   </data>
 </root>

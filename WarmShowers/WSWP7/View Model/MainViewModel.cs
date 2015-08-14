@@ -21,7 +21,8 @@ namespace WSApp.ViewModel
             this.isMapInitialized = false;
             this.isMeButtonPressPending = false;
             this.nearbyItems = new ObservableCollection<NearbyItemViewModel>();
-            this.pinnedItems = new ObservableCollection<PinnedItemViewModel>(); 
+            this.pinnedItems = new ObservableCollection<PinnedItemViewModel>();
+            this.foundItems = new ObservableCollection<FoundItemViewModel>(); 
             this.mapItems = new ObservableCollection<MapItemViewModel>();
             App.networkService.RegisterAlertCallback(new NetworkServices.NetworkService.AlertCallback(networkAlertCallback));
             App.locationService.RegisterAlertCallback(new LocationServices.LocationService.AlertCallback(locationAlertCallback));
@@ -35,6 +36,10 @@ namespace WSApp.ViewModel
             this.pinnedItemsSource = new System.Windows.Data.CollectionViewSource();
             this.pinnedItemsSource.Source = this.pinnedItems;
             this.pinnedItemsSource.SortDescriptions.Add(new SortDescription("Time", ListSortDirection.Descending));
+            this.foundItemsSource = new System.Windows.Data.CollectionViewSource();
+            this.foundItemsSource.Source = this.foundItems;
+            this.foundItemsSource.SortDescriptions.Add(new SortDescription("Time", ListSortDirection.Descending));
+ 
         }
 
         /// <summary>
@@ -42,6 +47,7 @@ namespace WSApp.ViewModel
         /// </summary>
         public ObservableCollection<NearbyItemViewModel> nearbyItems { get; private set; }
         public ObservableCollection<PinnedItemViewModel> pinnedItems { get; private set; }
+        public ObservableCollection<FoundItemViewModel> foundItems { get; private set; }
         public ObservableCollection<MapItemViewModel> mapItems { get; private set; }
 
         /// <summary>
@@ -49,6 +55,7 @@ namespace WSApp.ViewModel
         /// </summary>
         public CollectionViewSource nearbyItemsSource { get; set; }
         public CollectionViewSource pinnedItemsSource { get; set; }
+        public CollectionViewSource foundItemsSource { get; set; }
 
         public CredentialsProvider CredentialsProvider
         {   
@@ -414,6 +421,25 @@ namespace WSApp.ViewModel
         }
 
         /// <summary>
+        /// Change username in pinned list
+        /// </summary>
+        public void UpdateUsernamePinned(int uId, string uName)
+        {
+            GreatCircle gc = new GreatCircle();
+
+            PinnedItemViewModel found = FindItemInPinnedList(uId);
+            if (null != found)
+            {
+                long time = found.Time;
+                int userID = found.userID;
+
+                App.ViewModelMain.pinnedItems.Remove(found);
+                App.ViewModelMain.pinnedItems.Add(new PinnedItemViewModel() { Name = uName, Time = time, userID = userID });
+            }
+        }
+
+
+        /// <summary>
         /// Update UI to reflect new message received
         /// </summary>
         public void SetNewMessageCount(int uId, int count)
@@ -497,6 +523,21 @@ namespace WSApp.ViewModel
             }
             return found;
         }
+
+        //public FoundItemViewModel FindItemInPinnedList(int uId)
+        //{
+        //    FoundItemViewModel found = null;
+
+        //    foreach (var item in foundItems)
+        //    {
+        //        if (item.userID == uId)
+        //        {
+        //            found = item;
+        //            break;
+        //        }
+        //    }
+        //    return found;
+        //}
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(String propertyName)

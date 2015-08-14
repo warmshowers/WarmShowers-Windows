@@ -14,7 +14,7 @@ using Microsoft.Phone.Tasks;
 using WSApp.DataModel;
 using WSApp.ViewModel;
 
-enum pivotPage { nearby, recent };
+enum pivotPage { nearby, pinned, found };
 
 enum LastVisiblePage
 {
@@ -30,7 +30,7 @@ namespace WSApp
 //        private ApplicationBarIconButton filterButton = null;
         private ApplicationBarIconButton meButton = null;
         private ApplicationBarIconButton mapButton = null; 
-//        private ApplicationBarIconButton searchButton = null;
+        private ApplicationBarIconButton searchButton = null;
         private ApplicationBarIconButton updateButton = null;
         private ApplicationBarIconButton allButton = null;
         private ApplicationBarMenuItem webSiteMenu = null;
@@ -157,6 +157,7 @@ namespace WSApp
             // Enable selection on lists while pivot is visible
             PinnedListBox.SelectionChanged += PinnedListBox_SelectionChanged;
             NearbyListBox.SelectionChanged += NearbyListBox_SelectionChanged;
+            FoundListBox.SelectionChanged += FoundListBox_SelectionChanged;
 
             updateAppbar();
 
@@ -192,6 +193,7 @@ namespace WSApp
             LoginInfo.Visibility  = PannedInfo.Visibility  = LocationInfo.Visibility  = NetworkInfo.Visibility  = Visibility.Visible;
             LoginInfo2.Visibility = PannedInfo2.Visibility = LocationInfo2.Visibility = NetworkInfo2.Visibility = Visibility.Visible;
             LoginInfo3.Visibility = PannedInfo3.Visibility = LocationInfo3.Visibility = NetworkInfo3.Visibility = Visibility.Visible;
+            LoginInfo4.Visibility = PannedInfo4.Visibility = LocationInfo4.Visibility = NetworkInfo4.Visibility = Visibility.Visible;
 
             App.nearby.loadHosts();     // Load hosts we pulled from isolated storage
         }
@@ -240,6 +242,13 @@ namespace WSApp
                     allButton.Click += ApplicationBarIconButton_Click_All;
                 }
 
+                if (null == searchButton)
+                {   // Create search button
+                    searchButton = new ApplicationBarIconButton(new Uri("/Images/Appbar/appbar.magnify.png", UriKind.Relative));
+                    searchButton.Text = WebResources.searchButtonText;
+                    searchButton.Click += ApplicationBarIconButton_Click_Search;
+                }
+
                 // Debug
                 if (null == debugButton)
                 {   // Create me button
@@ -247,14 +256,6 @@ namespace WSApp
                     debugButton.Text = WebResources.debugButtonText;
                     debugButton.Click += ApplicationBarIconButton_Click_Debug;
                 }
-
-
-                //                if (null == searchButton)
-                //                {   // Create search button
-                //                    searchButton = new ApplicationBarIconButton(new Uri("/Images/Appbar/appbar.magnify.png", UriKind.Relative));
-                //                    searchButton.Text = WebResources.searchButtonText;
-                //                    searchButton.Click += ApplicationBarIconButton_Click_Search;
-                //                }
             }
 
             len = ApplicationBar.MenuItems.Count;
@@ -327,7 +328,6 @@ namespace WSApp
                 //                ApplicationBar.Buttons.Add(filterButton);
                 ApplicationBar.Buttons.Add(meButton);
                 ApplicationBar.Buttons.Add(mapButton);
-                //                ApplicationBar.Buttons.Add(searchButton);
 
                 // Add appropriate menu items
                 ApplicationBar.MenuItems.Clear();
@@ -337,7 +337,7 @@ namespace WSApp
                 ApplicationBar.MenuItems.Add(aboutMenu);
 
                 // Debug.  Uncomment this to enable debug mode.
-                //ApplicationBar.MenuItems.Add(debugMenu);   
+                ApplicationBar.MenuItems.Add(debugMenu);   
             }
             else if (MainPivot.Visibility != Visibility.Visible && lastVisiblePage != LastVisiblePage.mappage)
             {   // Map visible
@@ -345,7 +345,6 @@ namespace WSApp
                 ApplicationBar.Buttons.Clear();
                 //            ApplicationBar.Buttons.Add(filterButton);
                 ApplicationBar.Buttons.Add(meButton);
-                //            ApplicationBar.Buttons.Add(searchButton);
                 ApplicationBar.MenuItems.Clear();
                 ApplicationBar.MenuItems.Add(aerialViewMenu);
                 ApplicationBar.MenuItems.Add(roadViewMenu);
@@ -431,11 +430,27 @@ namespace WSApp
         }
 
         private void ApplicationBarIconButton_Click_Search(object sender, EventArgs e)
-        {   // Todo:  implement map search
-            SearchCanvas.Visibility = System.Windows.Visibility.Visible;
-            SearchBox.Visibility = System.Windows.Visibility.Visible;
-            SearchBox.SelectAll();
-            SearchBox.Focus();
+        {   // Todo:  implement host search
+            if (SearchCanvas.Visibility == System.Windows.Visibility.Visible)
+            {
+                SearchCanvas.Visibility = System.Windows.Visibility.Collapsed;
+            }
+            else
+            {
+                SearchCanvas.Visibility = System.Windows.Visibility.Visible;
+                SearchBox.Visibility = System.Windows.Visibility.Visible;
+                if (SearchBox.Text != "")
+                {
+                    SearchBoxHint.Visibility = System.Windows.Visibility.Collapsed;
+                }
+                else
+                {
+                    SearchBoxHint.Text = "username, full name, town, or email";
+                    SearchBox.Visibility = System.Windows.Visibility.Visible;
+                    SearchBox.SelectAll();
+                }
+                SearchBox.Focus();
+            }
         }
 
         private void ApplicationBarIconButton_Click_Update(object sender, EventArgs e)
@@ -454,18 +469,21 @@ namespace WSApp
             {
                 Search(SearchBox.Text);
             }
-        }
-
-        private void SearchButton_Click(object sender, RoutedEventArgs e)
-        {
-            Search(SearchBox.Text);
+            else if (SearchBox.Text == "")
+            {
+                SearchBoxHint.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                SearchBoxHint.Visibility = Visibility.Collapsed;
+            }
         }
 
         private void Search(string searchString)
         {
             SearchCanvas.Visibility = System.Windows.Visibility.Collapsed;
             SearchBox.Visibility = System.Windows.Visibility.Collapsed;
-
+            WebService.GetUsers(searchString);
         }
 
         #endregion
@@ -650,6 +668,14 @@ namespace WSApp
             centerItem_Click(uId);
         }
 
+        private void centerFoundItem_Click(object sender, RoutedEventArgs e)
+        {
+            // Get host location
+            FoundItemViewModel vm = (FoundItemViewModel)(sender as MenuItem).DataContext;
+            int uId = vm.userID;
+            centerItem_Click(uId);
+        }
+
         private void centerPinnedItem_Click(object sender, RoutedEventArgs e)
         {
             // Get host location
@@ -699,9 +725,31 @@ namespace WSApp
             }
         }
 
+        // Todo: refactor
+        private void pinFoundItem_Click(object sender, RoutedEventArgs e)
+        {
+            FoundItemViewModel vm = (FoundItemViewModel)(sender as MenuItem).DataContext;
+
+            if (App.pinned.isPinned(vm.userID))
+            {
+                App.pinned.unPin(vm.userID);
+            }
+            else
+            {
+                App.pinned.autoPin(vm.userID, vm.Name); // This will pin the minimal information currently available
+                WebService.GetHost(vm.userID);          // Try to get complete set of information to update pin
+            }
+        }
+
         private void UnpinPinnedItem_Click(object sender, RoutedEventArgs e)
         {
             PinnedItemViewModel vm = (PinnedItemViewModel)(sender as MenuItem).DataContext;
+            App.pinned.unPin(vm.userID);
+        }
+
+        private void UnpinFoundItem_Click(object sender, RoutedEventArgs e)
+        {
+            FoundItemViewModel vm = (FoundItemViewModel)(sender as MenuItem).DataContext;
             App.pinned.unPin(vm.userID);
         }
 
@@ -783,12 +831,17 @@ namespace WSApp
 //                    ApplicationBar.Buttons.Add(filterButton);
                     ApplicationBar.Buttons.Add(meButton);                    
                     ApplicationBar.Buttons.Add(mapButton);
-//                    ApplicationBar.Buttons.Add(searchButton);
+                    SearchCanvas.Visibility = Visibility.Collapsed;
                     break;
 
-                case (int) pivotPage.recent:
+                case (int) pivotPage.pinned:
                     ApplicationBar.Buttons.Add(updateButton);
                     ApplicationBar.Buttons.Add(allButton);
+                    SearchCanvas.Visibility = Visibility.Collapsed;
+                    break;
+
+                case (int)pivotPage.found:
+                    ApplicationBar.Buttons.Add(searchButton);
                     break;
             }
             if (null == p)
@@ -829,6 +882,22 @@ namespace WSApp
             }
         }
 
+        private void FoundListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (null != e && FoundListBox.SelectedIndex > -1)
+            {
+                FoundItemViewModel vm = (FoundItemViewModel)e.AddedItems[0];
+                if (null != vm)
+                {
+                    if ((vm.Name != WebResources.FoundListEmptyHeader) && (vm.Name != WebResources.loading))   // Disable click  Todo:  make this a better test
+                    {
+                        int uId = vm.userID;
+                        DisplayHost(uId);
+                    }
+                }
+            }
+        }
+
         private void DisplayHost(int uId)
         {
             if (!App.nearby.loadHostFromStorage(uId))     // Try to load cached copy of host profile
@@ -848,11 +917,13 @@ namespace WSApp
             // Disable selection on lists while main pivot is invisible
             PinnedListBox.SelectionChanged -= PinnedListBox_SelectionChanged;
             NearbyListBox.SelectionChanged -= NearbyListBox_SelectionChanged;
+            FoundListBox.SelectionChanged -= FoundListBox_SelectionChanged;
 
             Deployment.Current.Dispatcher.BeginInvoke(() =>
             { NavigationService.Navigate(new Uri("/HostPivotPage.xaml?id=" + uId, UriKind.Relative)); });
             PinnedListBox.SelectedIndex = -1; // Enable re-selection.  
-            NearbyListBox.SelectedIndex = -1; // Enable re-selection.  
+            NearbyListBox.SelectedIndex = -1; // Enable re-selection. 
+            FoundListBox.SelectedIndex = -1; // Enable re-selection.  
         }
 
         private void timer_ViewChangeEnd(Object state)

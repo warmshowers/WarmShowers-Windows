@@ -99,6 +99,49 @@
                     </StackPanel>
                 </Grid>
             </controls:PivotItem>
+
+            <!--Pivot item three-->
+            <controls:PivotItem Header="found" Margin="0,20,0,0">
+                <Grid x:Name="list3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="103*"/>
+                        <ColumnDefinition Width="57*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <ListBox x:Name="FoundListBox" ItemsSource="{Binding foundItemsSource.View}" Grid.Row="0" Margin="12,0,0,0" Grid.ColumnSpan="2">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Width="456">
+                                    <toolkit:ContextMenuService.ContextMenu>
+                                        <toolkit:ContextMenu>
+                                            <toolkit:MenuItem Header="unpin" Click="UnpinFoundItem_Click"/>
+                                            <toolkit:MenuItem Header="{Binding CenterHostContextMenuLabel}" Click="centerFoundItem_Click"/>
+                                        </toolkit:ContextMenu>
+                                    </toolkit:ContextMenuService.ContextMenu>
+                                    <TextBlock Text="{Binding Name}" TextWrapping="NoWrap"  Style="{StaticResource PhoneTextExtraLargeStyle}"/>
+                                    <TextBlock Text="{Binding line2}" TextWrapping="Wrap"  Style="{StaticResource PhoneTextSubtleStyle}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <Canvas x:Name="SearchCanvas" Visibility="Visible">
+                        <TextBox x:Name="SearchBox" Visibility="Visible" Opacity ="1" HorizontalAlignment="Center" Width="477"  KeyUp="SearchBox_KeyDown" Height="70" VerticalAlignment="Bottom"/>
+                        <TextBlock x:Name="SearchBoxHint" Visibility="Visible" HorizontalAlignment="Center" Margin="20,18,0,0" Width="450" Height="50" FontSize="25" VerticalAlignment="Center" Foreground="DimGray"   Text="hint text"/>
+                    </Canvas>
+
+                    <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.ColumnSpan="2">
+                        <TextBlock x:Name="LoginInfo4"  Text="{Binding loginAlert}" Margin="8,0,8,2" TextWrapping="NoWrap" Foreground="#FFD61818" Width="115" Style="{StaticResource PhoneTextTitle3Style}" Visibility="Collapsed"/>
+                        <TextBlock x:Name="PannedInfo4"  Text="{Binding pannedAlert}" Margin="8,0,8,2" TextWrapping="NoWrap" Foreground="#FFD61818"  Width="80" Style="{StaticResource PhoneTextTitle3Style}" Visibility="Collapsed"/>
+                        <TextBlock x:Name="LocationInfo4"  Text="{Binding locationAlert}" Margin="8,0,8,2" TextWrapping="NoWrap" Foreground="#FFD61818" Width="115" Style="{StaticResource PhoneTextTitle3Style}" Visibility="Collapsed"/>
+                        <TextBlock x:Name="NetworkInfo4"  Text="{Binding networkAlert}" Margin="8,0,8,2" TextWrapping="NoWrap" Foreground="#FFD61818" Width="110" Style="{StaticResource PhoneTextTitle3Style}" Visibility="Collapsed"/>
+                    </StackPanel>
+                </Grid>
+            </controls:PivotItem>
         </controls:Pivot>
 
         <Grid>
@@ -118,24 +161,14 @@
                 <Maps:MapItemsControl ItemsSource="{Binding mapItems}"  >
                     <Maps:MapItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Maps:Pushpin  Tag ="{Binding userID}" Location="{Binding location}" Content ="{Binding username}" Template="{StaticResource HostsPushpinTemplate}" Tap="Pushpin_Tap" />           
-                        </DataTemplate> 
-             		</Maps:MapItemsControl.ItemTemplate>
-            	</Maps:MapItemsControl>
+                            <Maps:Pushpin  Tag ="{Binding userID}" Location="{Binding location}" Content ="{Binding username}" Template="{StaticResource HostsPushpinTemplate}" Tap="Pushpin_Tap" />
+                        </DataTemplate>
+                    </Maps:MapItemsControl.ItemTemplate>
+                </Maps:MapItemsControl>
             </Maps:Map>
- 
-            <StackPanel x:Name="SearchCanvas" Margin="0,0,0,593" Opacity=".8" Background="Black" Grid.Row="0" Orientation="Horizontal"  Visibility="Collapsed">
-                <TextBox x:Name="SearchBox" Grid.Row="0" Opacity ="1.0" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="-13,0,0,0" Width="426" Height="71"  KeyDown="SearchBox_KeyDown" />
-                <Button x:Name="SearchButton" Opacity="1.0" VerticalAlignment="Top" HorizontalAlignment="Left" Click="SearchButton_Click" Width="65" Height="71"  >
-                    <Button.Background>
-                        <ImageBrush Stretch="None" ImageSource="/Images/Appbar/appbar.magnify.png"/>
-                    </Button.Background>
-                </Button>
-            </StackPanel>
-
 
             <StackPanel Orientation="Horizontal" Grid.Row="1">
-<!--                <TextBlock x:Name="FilterInfo2"  Text="{Binding filteredAlert}" HorizontalAlignment="Left" Foreground="#FFD61818"  Width="75"  Style="{StaticResource PhoneTextTitle3Style}" Visibility="Collapsed"/> -->
+                <!--                <TextBlock x:Name="FilterInfo2"  Text="{Binding filteredAlert}" HorizontalAlignment="Left" Foreground="#FFD61818"  Width="75"  Style="{StaticResource PhoneTextTitle3Style}" Visibility="Collapsed"/> -->
                 <TextBlock x:Name="LoginInfo2"  Text="{Binding loginAlert}" Margin="8,0,8,2" TextWrapping="NoWrap" Foreground="#FFD61818" Width="115" Style="{StaticResource PhoneTextTitle3Style}" Visibility="Collapsed"/>
                 <TextBlock x:Name="PannedInfo2"  Text="{Binding pannedAlert}" Margin="8,0,8,2" TextWrapping="NoWrap" Foreground="#FFD61818"  Width="80" Style="{StaticResource PhoneTextTitle3Style}" Visibility="Collapsed"/>
                 <TextBlock x:Name="LocationInfo2"  Text="{Binding locationAlert}" Margin="8,0,8,2" TextWrapping="NoWrap" Foreground="#FFD61818" Width="115" Style="{StaticResource PhoneTextTitle3Style}" Visibility="Collapsed"/>

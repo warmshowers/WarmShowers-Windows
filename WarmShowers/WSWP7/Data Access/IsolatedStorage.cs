@@ -72,7 +72,6 @@ namespace WSApp.DataModel
             }
             else
             {
-                GreatCircle gc = new GreatCircle();
                 Deployment.Current.Dispatcher.BeginInvoke(() =>
                 {
                     foreach (var p in App.pinned.pinnedProfiles)
@@ -93,6 +92,82 @@ namespace WSApp.DataModel
 
         }
     }
+
+    public static class FoundStore
+    {
+        const string storeFilename = "WSFound";
+
+        public static void load()
+        {
+            IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication();
+
+            try
+            {
+                IsolatedStorageFileStream stream = store.OpenFile(storeFilename, FileMode.OpenOrCreate);
+                if (null != stream)
+                {
+                    DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(FoundData));
+                    App.found = (FoundData)ser.ReadObject(stream);
+                    stream.Close();
+
+                    if (null == App.found)
+                    {   // First time app was run since installation
+                        App.found = new FoundData();
+                    }
+                }
+                loadUI();
+
+            }
+            catch (System.Exception) { };
+
+            //           App.nearby.loadHosts();  Todo:  Remove?
+        }
+
+        public static void save()
+        {
+            IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication();
+
+            try
+            {
+                IsolatedStorageFileStream stream = store.OpenFile(storeFilename, FileMode.Truncate);
+                if (null != stream)
+                {
+                    DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(FoundData));
+                    ser.WriteObject(stream, App.found);
+                    stream.Close();
+                }
+            }
+            catch (System.Exception) { }
+        }
+
+        private static void loadUI()
+        {
+            Deployment.Current.Dispatcher.BeginInvoke(() =>
+            {
+                App.ViewModelMain.foundItems.Clear();
+            });
+
+            if (App.found.foundProfiles.Count == 0)
+            {   // Load 'no hosts found' help text
+                Deployment.Current.Dispatcher.BeginInvoke(() =>
+                {
+                    App.ViewModelMain.foundItems.Add(new FoundItemViewModel() { Name = WebResources.FoundListEmptyHeader, line2 = WebResources.FoundListEmptyBody});
+                });
+
+            }
+            else
+            {
+                Deployment.Current.Dispatcher.BeginInvoke(() =>
+                {
+                    foreach (var p in App.found.foundProfiles)
+                    {
+                        App.ViewModelMain.foundItems.Add(new FoundItemViewModel() { Name = p.Value.name, Time = p.Value.lastUpdateTime, userID = p.Value.uId });
+                    }
+                });
+            }
+        }
+    }
+
 
     public static class NearbyStore
     {

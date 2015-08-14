@@ -457,6 +457,24 @@ namespace WSApp {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Press the search button in the toolbar below to search for Warm Showers members by username, full name, city, or email address.  Once found they can be pinned for future reference.  25 members are retrieved at a time, scrolling to the bottom of the list will trigger the next fetch of 25 members.  Members are found regardless of availability for hosting..
+        /// </summary>
+        internal static string FoundListEmptyBody {
+            get {
+                return ResourceManager.GetString("FoundListEmptyBody", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to no hosts found.
+        /// </summary>
+        internal static string FoundListEmptyHeader {
+            get {
+                return ResourceManager.GetString("FoundListEmptyHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to from my location.
         /// </summary>
         internal static string FromCurrentLocation {
@@ -1069,7 +1087,7 @@ namespace WSApp {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to no hosts are pinned.
+        ///   Looks up a localized string similar to no hosts pinned.
         /// </summary>
         internal static string PinnedListEmptyHeader {
             get {

@@ -299,7 +299,7 @@ namespace WSApp.DataModel
 
             if (null != this.host.profile.user_Result)
             {
-                Profile.User user = this.host.profile.user_Result;
+                User user = this.host.profile.user_Result;
                 offer = "";
                 bool firstLine = true;
                 if (user.bed == "1")
@@ -483,7 +483,7 @@ namespace WSApp.DataModel
         {
             if (null != host.profile.user_Result)  // cache may be incomplete
             {
-                Profile.User user = host.profile.user_Result;
+                User user = host.profile.user_Result;
                 GeoCoordinate loc = new GeoCoordinate();
                 loc.Latitude = user.latitude;
                 loc.Longitude = user.longitude;

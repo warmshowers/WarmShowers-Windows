@@ -125,6 +125,7 @@ Todo:  Implement filter
         // Provide access to the data model
         public static WSApp.DataModel.NearbyData nearby { get; set; }
         public static WSApp.DataModel.PinnedData pinned { get; set; }
+        public static WSApp.DataModel.FoundData found { get; set; }
         public static WSApp.DataModel.ApplicationSettings settings { get; private set; }
     
         /// <summary>
@@ -170,9 +171,11 @@ Todo:  Implement filter
             // Instantiate the data model
             nearby = new WSApp.DataModel.NearbyData();
             pinned = new WSApp.DataModel.PinnedData();
+            found = new WSApp.DataModel.FoundData();
             settings = new WSApp.DataModel.ApplicationSettings();
 
             PinnedStore.load();          // PinnedStore load must precede NearbyStore load
+            FoundStore.load();
             NearbyStore.load();
             settings.load();
 
@@ -216,7 +219,8 @@ Todo:  Implement filter
         {
             settings.save();
             NearbyStore.save();
-            PinnedStore.save();          
+            PinnedStore.save();
+            FoundStore.save();
         }
 
         // Code to execute when the application is closing (eg, user hit Back)
@@ -227,6 +231,7 @@ Todo:  Implement filter
             settings.save();
             NearbyStore.save();
             PinnedStore.save();
+            FoundStore.save();
         }
 
         // Code to execute if a navigation fails

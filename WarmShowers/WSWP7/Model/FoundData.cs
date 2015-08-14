@@ -10,15 +10,15 @@ using WSApp.ViewModel;
 namespace WSApp.DataModel
 {
     [DataContract]
-    public class PinnedData
+    public class FoundData
     {
         [DataMember]
-        public Dictionary<int, HostProfile> pinnedProfiles { get; set; }
+        public Dictionary<int, HostProfile> foundProfiles { get; set; }
 
         // Constructor
-        public PinnedData()
+        public FoundData()
         {
-            pinnedProfiles = new Dictionary<int, HostProfile>();
+            foundProfiles = new Dictionary<int, HostProfile>();
         }
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace WSApp.DataModel
         /// </summary>
         public bool isPinned(int uId)
         {
-            return (pinnedProfiles.ContainsKey(uId));
+            return (foundProfiles.ContainsKey(uId));
         }
 
         /// <summary>
@@ -34,15 +34,15 @@ namespace WSApp.DataModel
         /// </summary>
         public bool isPinned()
         {
-            return (pinnedProfiles.ContainsKey(App.nearby.selectedUid));
+            return (foundProfiles.ContainsKey(App.nearby.selectedUid));
         }
 
         public HostProfile getHost(int uId)
         {
             HostProfile host;
-            if (pinnedProfiles.ContainsKey(uId))
+            if (foundProfiles.ContainsKey(uId))
             {
-                if (pinnedProfiles.TryGetValue(uId, out host))
+                if (foundProfiles.TryGetValue(uId, out host))
                 {
                     return host;
                 }
@@ -75,7 +75,7 @@ namespace WSApp.DataModel
 
             if (isPinned(uId))
             {   // Update with existing pinned profile
-                isHostValid = pinnedProfiles.TryGetValue(uId, out host);
+                isHostValid = foundProfiles.TryGetValue(uId, out host);
             }
             if (!isHostValid)
             {   // Empty profile, will be filled first time this host is selected
@@ -115,11 +115,11 @@ namespace WSApp.DataModel
             int uId = host.uId;
             GreatCircle gc = new GreatCircle();
 
-            if (pinnedProfiles.Count == 0)
-            {   // Clear the "no pinned hosts" help message
+            if (foundProfiles.Count == 0)
+            {   // Clear the "no found hosts" help message
                 Deployment.Current.Dispatcher.BeginInvoke(() =>
                 {
-                    App.ViewModelMain.pinnedItems.Clear();
+                    App.ViewModelMain.foundItems.Clear();
                 });
             }
 
@@ -128,7 +128,7 @@ namespace WSApp.DataModel
             // Deal with case where host is already pinned
             if (isPinned(uId))
             {
-                pinnedProfiles.Remove(uId);
+                foundProfiles.Remove(uId);
             }
             Deployment.Current.Dispatcher.BeginInvoke(() =>
             {
@@ -136,7 +136,7 @@ namespace WSApp.DataModel
             });
 
             // Add pinned items to store and pinnedList UI
-            pinnedProfiles.Add(uId, host);
+            foundProfiles.Add(uId, host);
             Deployment.Current.Dispatcher.BeginInvoke(() =>
             {
                 App.ViewModelMain.Pin(uId, host.name, host.lastUpdateTime);
@@ -148,7 +148,7 @@ namespace WSApp.DataModel
 
         public bool unPin(int uId)
         {
-            pinnedProfiles.Remove(uId);
+            foundProfiles.Remove(uId);
 
             Deployment.Current.Dispatcher.BeginInvoke(() =>
             {
@@ -164,14 +164,14 @@ namespace WSApp.DataModel
             GreatCircle gc = new GreatCircle();
 
             HostProfile host = null;
-            if (pinnedProfiles.ContainsKey(uId))
+            if (foundProfiles.ContainsKey(uId))
             {
-                if (pinnedProfiles.TryGetValue(uId, out host))
+                if (foundProfiles.TryGetValue(uId, out host))
                 {
                     if (null != host)
                     {
                         host.lastUpdateTime = time;
-                        //  pinnedProfiles.Add(uId, host);  // Todo:  I don't think we need to add it back????
+                        //  foundProfiles.Add(uId, host);  // Todo:  I don't think we need to add it back????
                         App.ViewModelMain.UpdateTimestampPinned(uId, time);
                     }
                 }
@@ -192,8 +192,8 @@ namespace WSApp.DataModel
                 {   // Maintain timestamp of the pinned copy
                     App.nearby.host.lastUpdateTime = host.lastUpdateTime;
                 }
-                pinnedProfiles.Remove(uId);
-                pinnedProfiles.Add(uId, new HostProfile(App.nearby.host));
+                foundProfiles.Remove(uId);
+                foundProfiles.Add(uId, new HostProfile(App.nearby.host));
             
                 Deployment.Current.Dispatcher.BeginInvoke(() =>
                 {   // We now have the fullname, update it in pinned UI in main pivot...
