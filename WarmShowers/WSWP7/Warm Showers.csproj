@@ -199,6 +199,8 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Release History.md" />
+    <None Include="Warm_Showers_2015_08_19_23_36_12.sap" />
+    <None Include="Warm_Showers_2015_08_19_23_40_49.sap" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ApplicationIcon.png">
