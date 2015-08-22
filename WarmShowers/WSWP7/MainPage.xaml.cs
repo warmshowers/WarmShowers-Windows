@@ -231,13 +231,13 @@ namespace WSApp
                 }
                 if (null == updateButton)
                 {   // Create update button
-                    updateButton = new ApplicationBarIconButton(new Uri("/Images/Appbar/appbar.refresh.png", UriKind.Relative));
+                    updateButton = new ApplicationBarIconButton(new Uri("/Images/Appbar/appbar.getnew.png", UriKind.Relative));
                     updateButton.Text = WebResources.updateButtonText;
                     updateButton.Click += ApplicationBarIconButton_Click_Update;
                 }
                 if (null == allButton)
                 {   // Create update button
-                    allButton = new ApplicationBarIconButton(new Uri("/Images/Appbar/appbar.at.png", UriKind.Relative));
+                    allButton = new ApplicationBarIconButton(new Uri("/Images/Appbar/appbar.getall.png", UriKind.Relative));
                     allButton.Text = WebResources.allButtonText;
                     allButton.Click += ApplicationBarIconButton_Click_All;
                 }

@@ -209,11 +209,12 @@
     <Content Include="Background.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\Appbar\appbar.at.png" />
     <Content Include="Images\Appbar\appbar.attach.rest.png" />
     <Content Include="Images\Appbar\appbar.directions.png" />
     <Content Include="Images\Appbar\appbar.feedback.png" />
     <Content Include="Images\Appbar\appbar.filter.png" />
+    <Content Include="Images\Appbar\appbar.getall.png" />
+    <Content Include="Images\Appbar\appbar.getnew.png" />
     <Content Include="Images\Appbar\appbar.location.circle.png" />
     <Content Include="Images\Appbar\appbar.magnify.png" />
     <Content Include="Images\Appbar\appbar.manage.rest.png" />
