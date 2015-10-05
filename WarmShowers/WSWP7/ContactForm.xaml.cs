@@ -111,7 +111,7 @@ namespace WSApp
             {
                 if (null != App.nearby.messageThread.message_result)
                 {
-                    WebService.GetMessageThread(App.nearby.messageThread.message_result.thread_id);
+                    WebService.GetMessageThread(App.nearby.messageThread.message_result.pmtid);
                 }
             }
             WebService.GetMessages(false);

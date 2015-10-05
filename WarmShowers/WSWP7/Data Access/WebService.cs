@@ -136,6 +136,13 @@ namespace WSApp.DataModel
         #region RequestManager
         public class RequestManager
         {
+            // Basic auth (temporarily used to hit the test server during Drupal 7 upgrade)
+            bool doBasicAuth = false;
+            string basicUsername = "drupal";
+            string basicPassword = "drupal";
+
+            public string userAgent = "WP7.1";
+
             enum RequestState
             {
                 idle,
@@ -343,6 +350,16 @@ namespace WSApp.DataModel
                         break;
                 }
             }
+
+            public void basicAuth(HttpWebRequest httpReq)
+            {
+                if (doBasicAuth)
+                {
+                    string encoded = System.Convert.ToBase64String(System.Text.Encoding.GetEncoding("ISO-8859-1").GetBytes(basicUsername + ":" + basicPassword));
+                    //string encoded = basicUsername + ":" + basicPassword;
+                    httpReq.Headers["Authorization"] = "Basic " + encoded;
+                }
+            }
         }
         #endregion
 
@@ -362,6 +379,7 @@ namespace WSApp.DataModel
         {
             string uri = WebResources.uriPrefix + WebResources.WarmShowersUri + "/services/rest/user/login";
             requestManager.RequestStart(Request.login);
+            System.Diagnostics.Debug.WriteLine("uri: " + uri);
 
             try
             {
@@ -371,18 +389,19 @@ namespace WSApp.DataModel
                 httpReq.CookieContainer = cookieJar;
                 httpReq.Accept = "application/json";
                 httpReq.Method = "POST";
+                httpReq.UserAgent = requestManager.userAgent;
+                requestManager.basicAuth(httpReq);
+                
                 httpReq.BeginGetRequestStream(new AsyncCallback(LoginPostCallback), httpReq);
             }
             catch (WebException e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return false;
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return false;
             }
             return true;
@@ -407,13 +426,11 @@ namespace WSApp.DataModel
             catch (WebException e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 throw;
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 throw;
             }
             System.Diagnostics.Debug.WriteLine("LoginPostCallback");
@@ -448,18 +465,15 @@ namespace WSApp.DataModel
                 Deployment.Current.Dispatcher.BeginInvoke(() => { App.webService.loginFailedCallback(WebResources.LoginFailed, un, pw); });
 
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return;
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return;
             }
             requestManager.RequestComplete(WebService.Request.login);
         }
-
         #endregion
 
         #region Logout
@@ -483,19 +497,19 @@ namespace WSApp.DataModel
                 httpReq.CookieContainer = cookieJar;
                 httpReq.Accept = "application/json";
                 httpReq.Headers["x-csrf-token"] = sessionToken;
-                httpReq.Method = "POST";                
+                httpReq.Method = "POST";
+                httpReq.UserAgent = requestManager.userAgent;
+                requestManager.basicAuth(httpReq);
                 httpReq.BeginGetRequestStream(new AsyncCallback(LogoutPostCallback), httpReq);
             }
             catch (WebException e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return false;
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return false;
             }
             return true;
@@ -511,13 +525,11 @@ namespace WSApp.DataModel
             catch (WebException e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 throw;
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 throw;
             }
             System.Diagnostics.Debug.WriteLine("LogoutPostCallback");
@@ -537,13 +549,11 @@ namespace WSApp.DataModel
             catch (WebException e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return;
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return;
             }
             requestManager.RequestComplete(WebService.Request.logout);
@@ -570,18 +580,18 @@ namespace WSApp.DataModel
                 httpReq.CookieContainer = cookieJar;
                 httpReq.Accept = "text/plain";
                 httpReq.Method = "GET";
+                httpReq.UserAgent = requestManager.userAgent;
+                requestManager.basicAuth(httpReq);
                 httpReq.BeginGetResponse(new AsyncCallback(GetTokenResponseCallback), httpReq);
             }
             catch (WebException e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return false;
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return false;
             }
             return true;
@@ -605,13 +615,11 @@ namespace WSApp.DataModel
             catch (WebException e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return;
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return;
             }
             requestManager.RequestComplete(WebService.Request.getToken);
@@ -647,6 +655,9 @@ namespace WSApp.DataModel
                 httpReq.Accept = "application/json";
                 httpReq.Headers["x-csrf-token"] = sessionToken;
                 httpReq.Method = "POST";
+                httpReq.UserAgent = requestManager.userAgent;
+                requestManager.basicAuth(httpReq);
+
                 // httpReq.ContentType = "application/x-www-form-urlencoded; charset=utf-8";
                 // httpReq.Headers.Set(HttpRequestHeader.AcceptLanguage, "en, fr, de, ja, nl, it, es, pt, pt-PT, da, fi, nb, sv, ko, zh-Hans, zh-Hant, ru, pl, tr, uk, ar, hr, cs, el, he, ro, sk, th, id, ms, en-GB, ca, hu, vi, en-us;q=0.8");
                 // httpReq.UserAgent = "WS/342 (iPod touch; iOS 6.0.1; Scale/2.00)";
@@ -655,13 +666,11 @@ namespace WSApp.DataModel
             catch (WebException e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return false;
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return false;
             }
             return true;
@@ -715,13 +724,11 @@ namespace WSApp.DataModel
             catch (WebException e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 throw;
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 throw;
             }
             System.Diagnostics.Debug.WriteLine("GetHostsPostCallback");
@@ -756,13 +763,11 @@ namespace WSApp.DataModel
             catch (WebException e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return;
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return;
             }
             requestManager.RequestComplete(WebService.Request.getHosts);
@@ -790,18 +795,18 @@ namespace WSApp.DataModel
                 httpReq.CookieContainer = cookieJar;
                 httpReq.Accept = "application/json";
                 httpReq.Method = "GET";
+                httpReq.UserAgent = requestManager.userAgent;
+                requestManager.basicAuth(httpReq);
                 httpReq.BeginGetResponse(new AsyncCallback(GetHostResponseCallback), httpReq);
             }
             catch (WebException e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return false;
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return false;
             }
             return true;
@@ -835,13 +840,11 @@ namespace WSApp.DataModel
             catch (WebException e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return;
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return;
             }
             requestManager.RequestComplete(WebService.Request.getHost);
@@ -868,18 +871,18 @@ namespace WSApp.DataModel
                 httpReq.CookieContainer = cookieJar;
                 httpReq.Accept = "application/json";
                 httpReq.Method = "GET";
+                httpReq.UserAgent = requestManager.userAgent;
+                requestManager.basicAuth(httpReq);
                 httpReq.BeginGetResponse(new AsyncCallback(GetFeedbackResponseCallback), httpReq);
             }
             catch (WebException e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return false;
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return false;
             }
             return true;
@@ -894,9 +897,9 @@ namespace WSApp.DataModel
                 if (null != response)
                 {
                     Stream stream = response.GetResponseStream();
-//                    StreamReader sr = new StreamReader(stream);
-//                    string junk = sr.ReadToEnd();
-//                    string junk2 = junk;
+                    //StreamReader sr = new StreamReader(stream);
+                    //string junk = sr.ReadToEnd();
+                    //string junk2 = junk;
  
                     var serializer = new DataContractJsonSerializer(typeof(Feedback.Recommendations_result));
                     App.nearby.host.feedback.recommendations_Result = (Feedback.Recommendations_result)serializer.ReadObject(stream);
@@ -909,13 +912,11 @@ namespace WSApp.DataModel
             catch (WebException e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return;
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return;
             }
             requestManager.RequestComplete(WebService.Request.getFeedback);
@@ -953,18 +954,18 @@ namespace WSApp.DataModel
                 httpReq.Accept = "application/json";
                 httpReq.Headers["x-csrf-token"] = sessionToken;
                 httpReq.Method = "POST";
+                httpReq.UserAgent = requestManager.userAgent;
+                requestManager.basicAuth(httpReq);
                 httpReq.BeginGetRequestStream(new AsyncCallback(SendFeedbackPostCallback), httpReq);
             }
             catch (WebException e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return false;
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return false;
             }
             return true;
@@ -995,13 +996,11 @@ namespace WSApp.DataModel
             catch (WebException e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 throw;
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 throw;
             }
             System.Diagnostics.Debug.WriteLine("SendFeedbackPostCallback");
@@ -1025,14 +1024,12 @@ namespace WSApp.DataModel
             {
                 Deployment.Current.Dispatcher.BeginInvoke(() => { App.webService.sendFeedbackFailCallback(); });  
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return;
             }
             catch (Exception e)
             {
                 Deployment.Current.Dispatcher.BeginInvoke(() => { App.webService.sendFeedbackFailCallback(); });  
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return;
             }
             requestManager.RequestComplete(WebService.Request.sendFeedback);
@@ -1062,18 +1059,18 @@ namespace WSApp.DataModel
                 httpReq.Accept = "application/json";
                 httpReq.Headers["x-csrf-token"] = sessionToken;
                 httpReq.Method = "POST";
+                httpReq.UserAgent = requestManager.userAgent;
+                requestManager.basicAuth(httpReq);
                 httpReq.BeginGetRequestStream(new AsyncCallback(GetMessagesPostCallback), httpReq);
             }
             catch (WebException e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return false;
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return false;
             }
             return true;
@@ -1089,13 +1086,11 @@ namespace WSApp.DataModel
             catch (WebException e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 throw;
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 throw;
             }
             System.Diagnostics.Debug.WriteLine("GetMessagesPostCallback");
@@ -1110,9 +1105,9 @@ namespace WSApp.DataModel
                 if (null != response)
                 {
                     Stream stream = response.GetResponseStream();
-//                    StreamReader sr = new StreamReader(stream);
-//                    string junk = sr.ReadToEnd();
-//                    string junk2 = junk;
+                    //StreamReader sr = new StreamReader(stream);
+                    //string junk = sr.ReadToEnd();
+                    //string junk2 = junk;
 
                     var serializer = new DataContractJsonSerializer(typeof(List<Messages.Message>));
                     List<Messages.Message> messages = new List<Messages.Message>();
@@ -1170,13 +1165,13 @@ namespace WSApp.DataModel
             catch (WebException e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
+                requestManager.RequestComplete(WebService.Request.getMessages);
                 return;
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
+                requestManager.RequestComplete(WebService.Request.getMessages);
                 return;
             }
             requestManager.RequestComplete(WebService.Request.getMessages);
@@ -1211,18 +1206,18 @@ namespace WSApp.DataModel
                 httpReq.Accept = "application/json";
                 httpReq.Headers["x-csrf-token"] = sessionToken;
                 httpReq.Method = "POST";
+                httpReq.UserAgent = requestManager.userAgent;
+                requestManager.basicAuth(httpReq);
                 httpReq.BeginGetRequestStream(new AsyncCallback(SendMessagePostCallback), httpReq);
             }
             catch (WebException e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return false;
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return false;
             }
             return true;
@@ -1248,13 +1243,11 @@ namespace WSApp.DataModel
             catch (WebException e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 throw;
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 throw;
             }
             System.Diagnostics.Debug.WriteLine("SendMessagePostCallback");
@@ -1279,14 +1272,12 @@ namespace WSApp.DataModel
             {
                 Deployment.Current.Dispatcher.BeginInvoke(() => { App.webService.sendMessageFailCallback(); });    
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return;
             }
             catch (Exception e)
             {
                 Deployment.Current.Dispatcher.BeginInvoke(() => { App.webService.sendMessageFailCallback(); });    
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return;
             }
             requestManager.RequestComplete(WebService.Request.sendMessage);
@@ -1316,18 +1307,18 @@ namespace WSApp.DataModel
                 httpReq.Accept = "application/json";
                 httpReq.Headers["x-csrf-token"] = sessionToken;
                 httpReq.Method = "POST";
+                httpReq.UserAgent = requestManager.userAgent;
+                requestManager.basicAuth(httpReq);
                 httpReq.BeginGetRequestStream(new AsyncCallback(ReplyMessagePostCallback), httpReq);
             }
             catch (WebException e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return false;
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return false;
             }
             return true;
@@ -1340,7 +1331,7 @@ namespace WSApp.DataModel
 
             if (null == message_result) return;
 
-            string parms = "thread_id=" + App.nearby.messageThread.message_result.thread_id + "&body=" + System.Net.HttpUtility.UrlEncode(contactData.body); 
+            string parms = "thread_id=" + App.nearby.messageThread.message_result.pmtid + "&body=" + System.Net.HttpUtility.UrlEncode(contactData.body); 
             
             try
             {
@@ -1356,13 +1347,11 @@ namespace WSApp.DataModel
             catch (WebException e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 throw;
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 throw;
             }
             System.Diagnostics.Debug.WriteLine("ReplyMessagePostCallback");
@@ -1377,8 +1366,8 @@ namespace WSApp.DataModel
                 if (null != response)
                 {
                     Stream stream = response.GetResponseStream();
-                    //                    StreamReader sr = new StreamReader(stream);
-                    //                    string junk = sr.ReadToEnd();
+                    //StreamReader sr = new StreamReader(stream);
+                    //string junk = sr.ReadToEnd();
                     stream.Close();
                 }
                 response.Close();
@@ -1387,14 +1376,12 @@ namespace WSApp.DataModel
             {
                 Deployment.Current.Dispatcher.BeginInvoke(() => { App.webService.sendMessageFailCallback(); });    
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return;
             }
             catch (Exception e)
             {
                 Deployment.Current.Dispatcher.BeginInvoke(() => { App.webService.sendMessageFailCallback(); });
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return;
             }
             requestManager.RequestComplete(WebService.Request.replyMessage);
@@ -1423,18 +1410,18 @@ namespace WSApp.DataModel
                 httpReq.Accept = "application/json";
                 httpReq.Headers["x-csrf-token"] = sessionToken;
                 httpReq.Method = "POST";
+                httpReq.UserAgent = requestManager.userAgent;
+                requestManager.basicAuth(httpReq);
                 httpReq.BeginGetRequestStream(new AsyncCallback(GetMessageCountPostCallback), httpReq);
             }
             catch (WebException e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return false;
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return false;
             }
             return true;
@@ -1450,13 +1437,11 @@ namespace WSApp.DataModel
             catch (WebException e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 throw;
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 throw;
             }
             System.Diagnostics.Debug.WriteLine("GetMessageCountPostCallback");
@@ -1479,13 +1464,11 @@ namespace WSApp.DataModel
             catch (WebException e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return;
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return;
             }
             requestManager.RequestComplete(WebService.Request.getMessageCount);
@@ -1518,18 +1501,18 @@ namespace WSApp.DataModel
                 httpReq.Accept = "application/json";
                 httpReq.Headers["x-csrf-token"] = sessionToken;
                 httpReq.Method = "POST";
+                httpReq.UserAgent = requestManager.userAgent;
+                requestManager.basicAuth(httpReq);
                 httpReq.BeginGetRequestStream(new AsyncCallback(GetMessageThreadPostCallback), httpReq);
             }
             catch (WebException e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return false;
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return false;
             }
              return true;
@@ -1538,6 +1521,7 @@ namespace WSApp.DataModel
         static void GetMessageThreadPostCallback(IAsyncResult result)
         {
             string parms = "thread_id=" + threadId.ToString();
+            System.Diagnostics.Debug.WriteLine("get " + parms);
 
             try
             {
@@ -1553,13 +1537,11 @@ namespace WSApp.DataModel
             catch (WebException e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 throw;
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 throw;
             }
             System.Diagnostics.Debug.WriteLine("GetMessageThreadPostCallback");
@@ -1574,9 +1556,9 @@ namespace WSApp.DataModel
                 if (null != response)
                 {
                     Stream stream = response.GetResponseStream();
-//                    StreamReader sr = new StreamReader(stream);
-//                    string junk = sr.ReadToEnd();
-//                    string junk2 = junk;
+                    //StreamReader sr = new StreamReader(stream);
+                    //string junk = sr.ReadToEnd();
+                    //string junk2 = junk;
 
                     var serializer = new DataContractJsonSerializer(typeof(MessageThread.Message_result));
                     App.nearby.messageThread.message_result = (MessageThread.Message_result)serializer.ReadObject(stream);
@@ -1589,13 +1571,11 @@ namespace WSApp.DataModel
             catch (WebException e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return;
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return;
             }
             requestManager.RequestComplete(WebService.Request.getMessageThread);
@@ -1604,7 +1584,7 @@ namespace WSApp.DataModel
         #endregion
 
         #region markThreadRead
-        // POST /services/rest/message/getThread
+        // POST /services/rest/message/markThreadRead
         // Accept: application/json
         // X-CSRF-Token: sessionToken
         // Cookie: <session_name>=<sessid>  (obtained from login)
@@ -1626,18 +1606,18 @@ namespace WSApp.DataModel
                 httpReq.Accept = "application/json";
                 httpReq.Headers["x-csrf-token"] = sessionToken;
                 httpReq.Method = "POST";
+                httpReq.UserAgent = requestManager.userAgent;
+                requestManager.basicAuth(httpReq);
                 httpReq.BeginGetRequestStream(new AsyncCallback(markThreadReadPostCallback), httpReq);
             }
             catch (WebException e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return false;
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return false;
             }
             return true;
@@ -1646,6 +1626,7 @@ namespace WSApp.DataModel
         static void markThreadReadPostCallback(IAsyncResult result)
         {
             string parms = "thread_id=" + threadId.ToString();
+            System.Diagnostics.Debug.WriteLine("mark " + parms);
 
             try
             {
@@ -1661,13 +1642,11 @@ namespace WSApp.DataModel
             catch (WebException e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 throw;
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 throw;
             }
             System.Diagnostics.Debug.WriteLine("markThreadReadPostCallback");
@@ -1693,13 +1672,11 @@ namespace WSApp.DataModel
             catch (WebException e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return;
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Message " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Exception Data " + e.Data);
                 return;
             }
             requestManager.RequestComplete(WebService.Request.markThreadRead);

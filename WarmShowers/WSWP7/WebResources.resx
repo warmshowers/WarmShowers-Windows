@@ -436,7 +436,7 @@
   </data>
   <data name="WarmShowersUri" xml:space="preserve">
     <value>www.warmshowers.org</value>
-    <comment>Do not localize</comment>
+    <comment>Do not localize www.warmshowers.org</comment>
   </data>
   <data name="AboutDevelopedBy" xml:space="preserve">
     <value>Warm Showers for Windows Phone was developed by Kurt Ziegler.</value>
@@ -583,7 +583,7 @@
     <value>preferred notice</value>
   </data>
   <data name="RevisionsUri" xml:space="preserve">
-    <value>https://github.com/warmshowers/WarmShowers-Windows/blob/WP7/WarmShowers/WSWP7/Release%20History.md</value>
+    <value>https://github.com/warmshowers/WarmShowers-Windows/blob/master/WarmShowers/WSWP7/Release%20History.md</value>
   </data>
   <data name="debugEnabled" xml:space="preserve">
     <value>debug mode is enabled</value>
