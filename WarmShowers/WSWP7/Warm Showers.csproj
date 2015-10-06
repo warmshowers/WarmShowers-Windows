@@ -235,6 +235,7 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Release History.md" />
+    <None Include="User Guide.docx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ApplicationIcon.png">
@@ -277,11 +278,6 @@
     <Content Include="Images\About\WSBanner.png" />
     <Content Include="SplashScreenImage.jpg" />
     <Content Include="Images\Appbar\appbar.Delete.png" />
-    <Content Include="Toolkit.Content\ApplicationBar.Add.png" />
-    <Content Include="Toolkit.Content\ApplicationBar.Cancel.png" />
-    <Content Include="Toolkit.Content\ApplicationBar.Check.png" />
-    <Content Include="Toolkit.Content\ApplicationBar.Delete.png" />
-    <Content Include="Toolkit.Content\ApplicationBar.Select.png" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
