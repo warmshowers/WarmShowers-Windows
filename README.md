@@ -3,6 +3,7 @@ WarmShowers-Windows
 
 This is the home for Warm Showers for WP7, WP8, and Windows projects.
 * <a href="https://github.com/warmshowers/WarmShowers-Windows/blob/master/WarmShowers/WSWP7/Release%20History.md">Release history</a>
+* <a href="https://github.com/warmshowers/WarmShowers-Windows/blob/master/User%20Guide.pdf">User Guide</a> (a work in progress)
 * Apps communicate with WarmShowers.org through <a href="https://github.com/warmshowers/Warmshowers.org/wiki/Warmshowers-RESTful-Services-for-Mobile-Apps">Warmshowers RESTful Services for Mobile Apps</a>.
 * Currently only the WP7 app is published to the Marketplace/Store, and is the only source included here.  The native WP7 app also works on WP8, WP8.1, and WP10 (probably).
 * To build, load the WarmShowers solution (WarmShowers.sln) into Visual Studio 2012 Express for Windows Phone.  Newer Visual Studio versions may or may not be able to target WP7.  And that may or may not matter.
