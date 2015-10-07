@@ -9,6 +9,7 @@ using System.Runtime.Serialization;
 //   {"thread_id":"27526","subject":"another test","last_updated":"1355766609","is_new":"1","participants":[]},
 //   {"thread_id":"27387","subject":"test from Kurt","last_updated":"1355728319","is_new":"0","participants":[]},
 //   {"thread_id":"25367","subject":"test from was iPhone","last_updated":"1355157972","is_new":"0","participants":[]}]
+
 namespace WSApp.DataModel
 {
     [DataContract]
@@ -43,6 +44,9 @@ namespace WSApp.DataModel
 
             [DataMember]
             public string name { get; set; }
+
+            [DataMember]
+            public string fullname { get; set; }
         }
 
         [DataContract]
@@ -58,7 +62,13 @@ namespace WSApp.DataModel
             public long last_updated { get; set; }
 
             [DataMember]
+            public long thread_started { get; set; }
+
+            [DataMember]
             public int is_new { get; set; }
+
+            [DataMember]
+            public int count { get; set; }
 
             [DataMember]
             public List<Participant> participants { get; set; }

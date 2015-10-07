@@ -221,15 +221,13 @@ namespace WSApp.DataModel
         [DataMember]
         public string workphone { get; set; }
 
+		// Removed in D7
         [DataMember]
         public string picture { get; set; }
 
-        // The pictures retrieved from the following paths are pretty crappy.
-        //[DataMember]
-        //public string profile_image_mobile_profile_photo_std { get; set; }
-
-        //[DataMember]
-        //public string profile_image_profile_picture { get; set; }
+        // Added in D7 for WP
+        [DataMember]
+        public string profile_image_mobile_photo_456 { get; set; }
     }
 
 

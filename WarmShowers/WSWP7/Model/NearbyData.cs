@@ -522,11 +522,10 @@ namespace WSApp.DataModel
                     {
                         App.ViewModelHost.aboutItems.Add(new AboutItemViewModel() { Line1 = WebResources.AboutURL, Line2 = user.URL, Type = AboutItemViewModel.AboutType.web });
                     }
-//                    App.ViewModelHost.aboutItems.Add(new AboutItemViewModel() { Line1 = WebResources.AboutHostUrl, Line2 = "https://www.warmshowers.org/user/" + user.uid, Type = AboutItemViewModel.AboutType.web });
                     if (!string.IsNullOrEmpty(user.picture))
                     {
-                        App.ViewModelHost.aboutItems.Add(new AboutItemViewModel() { Picture = "https://www.warmshowers.org/" + user.picture, Type = AboutItemViewModel.AboutType.picture });
- //                       App.ViewModelHost.aboutItems.Add(new AboutItemViewModel() { Picture = user.profile_image_profile_picture, Type = AboutItemViewModel.AboutType.picture });
+                        App.ViewModelHost.aboutItems.Add(new AboutItemViewModel() { Picture = user.profile_image_mobile_photo_456, Type = AboutItemViewModel.AboutType.picture });
+
                     }
                     App.ViewModelHost.aboutItems.Add(new AboutItemViewModel() { Line1 = WebResources.AboutComments, Line2 = user.comments, Type = AboutItemViewModel.AboutType.comments });
 
@@ -729,7 +728,7 @@ namespace WSApp.DataModel
             GreatCircle gc = new GreatCircle();
 
             Deployment.Current.Dispatcher.BeginInvoke(() =>
-            {
+            {            
                 App.ViewModelMessage.messageItems.Clear();
 
                 // Handle message list being empty
@@ -743,17 +742,18 @@ namespace WSApp.DataModel
                 }
                 else
                 {
+                    App.ViewModelMessage.subject = messageThread.message_result.subject;
                     for (int i = len - 1; i >= 0; i--)
                     {   // Display most recent message first
                         MessageThread.Message message = messageThread.message_result.messages[i];
-                        if (i == len - 1)
-                        {   // Subject is repeated in each message   
-                            App.ViewModelMessage.subject = message.subject;
-                        }
 
                         long date = message.timestamp;
-                        string author = message.author.name;
-                        if (author != host.profile.user_Result.name) author = WebResources.me;
+
+                        //Lookup author fullname
+                        int uid;
+                        int.TryParse(message.author, out uid);
+                        string author = getFullName(uid);
+
                         string header = WebResources.SentBy + " " + author + " " + WebResources.On + " " + gc.date_mmmddyyyy(date);
                         if (1 == message.is_new) header += " - " + WebResources.New;
 
