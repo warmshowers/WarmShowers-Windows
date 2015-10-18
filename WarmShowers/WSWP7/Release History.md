@@ -3,6 +3,9 @@
 
 Warm Showers for Windows Phone
 
+v1.3.1.0 18Oct2015
+* Fixed bug that displayed username instead of fullname after D7 upgrade.  Issue 56.
+
 v1.3.0.0 5Oct2015
 * Upgraded to support new Drupal 7 web service requirements.  Issue 46.
   PRIOR VERSIONS WILL NOT WORK AFTER OCTOBER 13 2015

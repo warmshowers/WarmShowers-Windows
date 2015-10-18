@@ -239,7 +239,7 @@ namespace WSApp.DataModel
                     var accountQuery =
                         from account in this.hosts.hosts_Result.accounts
                         where (account.uid == uId)
-                        select account.name;
+                        select account.fullname;
 
                     uName = accountQuery.First();
                 }
@@ -627,7 +627,7 @@ namespace WSApp.DataModel
             {
                 MapCoord coord = new MapCoord();
                 coord.geoCoord = new GeoCoordinate(account.latitude, account.longitude);
-                coord.userName = account.name;
+                coord.userName = account.fullname;
                 coord.uId = account.uid;
                 if (App.pinned.isPinned(coord.uId))
                 {
@@ -649,7 +649,7 @@ namespace WSApp.DataModel
                 }
 
                 Deployment.Current.Dispatcher.BeginInvoke(() =>
-                { App.ViewModelMain.nearbyItems.Add(new NearbyItemViewModel() { Name = account.name, Line2 = distance, userID = account.uid, Distance = d }); });
+                { App.ViewModelMain.nearbyItems.Add(new NearbyItemViewModel() { Name = account.fullname, Line2 = distance, userID = account.uid, Distance = d }); });
             }
 
             Deployment.Current.Dispatcher.BeginInvoke(() => { App.ViewModelMain.mapItems.Clear(); });

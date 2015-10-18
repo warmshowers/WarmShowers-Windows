@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-//  [{"thread_id":"34632","subject":"test from klzig_test","last_updated":"1357758921","is_new":"1","participants":[{"uid":"41682","name":"klzig_test"}]},
+//  [{"thread_id":"34632","subject":"test from klzig_test","last_updated":"1357758921","is_new":"1","participants":[{"uid":"41682","name":"klzig_test", "fullname":"Kurt Ziegler"}]},
 //   {"thread_id":"34558","subject":"subject sent from phone","last_updated":"1357746028","is_new":"0","participants":[]},
 //   {"thread_id":"34557","subject":"subject sent from phone","last_updated":"1357746006","is_new":"1","participants":[]},
 //   {"thread_id":"34335","subject":"subject sent from phone","last_updated":"1357682696","is_new":"1","participants":[]},
