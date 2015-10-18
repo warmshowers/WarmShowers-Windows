@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Deployment xmlns="http://schemas.microsoft.com/windowsphone/2012/deployment" AppPlatformVersion="8.0">
   <DefaultLanguage xmlns="" code="" />
-  <App xmlns="" ProductID="{fbb8c944-781c-4f04-9d48-882b031db7d3}" Title="Warm Showers" RuntimeType="Silverlight" Version="1.3.0.0" Genre="apps.normal" Author="Kurt Ziegler" Description="Location-based management of your Warm Showers hosts." Publisher="FlyWare" PublisherID="{f448c1bd-ff0d-4779-acad-0fe28ca0a961}">
+  <App xmlns="" ProductID="{fbb8c944-781c-4f04-9d48-882b031db7d3}" Title="Warm Showers" RuntimeType="Silverlight" Version="2.0.0.0" Genre="apps.normal" Author="Kurt Ziegler" Description="Location-based management of your Warm Showers hosts." Publisher="Warmshowers.org Foundation" PublisherID="{f448c1bd-ff0d-4779-acad-0fe28ca0a961}">
     <IconPath IsRelative="true" IsResource="false">ApplicationIcon.png</IconPath>
     <Capabilities>
       <Capability Name="ID_CAP_LOCATION" />
@@ -22,10 +22,14 @@
           <Count>0</Count>
           <BackgroundImageURI IsResource="false" IsRelative="true">Background.png</BackgroundImageURI>
           <Title>Warm Showers</Title>
-          <BackContent></BackContent>
-          <BackBackgroundImageURI></BackBackgroundImageURI>
-          <BackTitle></BackTitle>
-          <DeviceLockImageURI></DeviceLockImageURI>
+          <BackContent>
+          </BackContent>
+          <BackBackgroundImageURI>
+          </BackBackgroundImageURI>
+          <BackTitle>
+          </BackTitle>
+          <DeviceLockImageURI>
+          </DeviceLockImageURI>
           <HasLarge>false</HasLarge>
         </TemplateFlip>
       </PrimaryToken>
