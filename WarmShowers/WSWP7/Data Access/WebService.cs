@@ -1182,6 +1182,7 @@ namespace WSApp.DataModel
                     Stream stream = response.GetResponseStream();
 //                    StreamReader sr = new StreamReader(stream);
 //                    string junk = sr.ReadToEnd();
+                    stream.Close();
                 }
                 response.Close();
             }
@@ -1312,7 +1313,7 @@ namespace WSApp.DataModel
                                     messageCount = new MessageCount();
                                 }
                                 messageCount.count = messageCount.count + message.is_new;
-                                messageCount.name = participant.name;
+                                messageCount.name = participant.fullname;
                                 counts.Remove(participant.uid);
                                 counts.Add(participant.uid, messageCount);
                             }
@@ -1321,7 +1322,7 @@ namespace WSApp.DataModel
                     foreach (var item in counts)
                     {   // This host is in a new thread with us, automatically pin and show message count in UI 
                         messageCount = item.Value;      
-                        App.pinned.newMessage(item.Key, messageCount.name, messageCount.count);  // Will initially display username
+                        App.pinned.newMessage(item.Key, messageCount.name, messageCount.count);
                     }
                   App.nearby.loadMessages();
                 }
@@ -1623,6 +1624,7 @@ namespace WSApp.DataModel
                     Stream stream = response.GetResponseStream();
 //                    StreamReader sr = new StreamReader(stream);
 //                    string junk = sr.ReadToEnd();
+                    stream.Close();
                 }
                 response.Close();
             }

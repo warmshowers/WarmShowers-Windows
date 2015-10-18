@@ -10,7 +10,7 @@
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     xmlns:local="clr-namespace:WSApp"  
     xmlns:LocationServices="clr-namespace:WSApp.LocationServices"  
-    d:DataContext="{d:DesignData SampleData/MainViewModelSampleData.xaml}"
+    d:DataContext="{d:DesignData Sample Data/MainViewModelSampleData.xaml}"
     x:Class="WSApp.MainPage" 
     mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="768" 
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
@@ -148,7 +148,7 @@
             <Image x:Name="SplashScreen" Source="SplashScreenImage.jpg" Visibility="Visible" Stretch="Fill" VerticalAlignment="Top" HorizontalAlignment="Left" />
         </Grid>
 
-        <Grid x:Name="MapPage" Background="Transparent" Visibility="Visible" Margin="0,0,0,0">
+        <Grid x:Name="MapPage" Background="Transparent" Visibility="Collapsed" Margin="0,0,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
