@@ -11,15 +11,15 @@
     xmlns:WSDataModel="clr-namespace:WSApp.DataModel" 
     xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
     xmlns:ec="clr-namespace:Microsoft.Expression.Interactivity.Core;assembly=Microsoft.Expression.Interactions"  
-    d:DataContext="{d:DesignData SampleData/HostViewModelSampleData.xaml}" 
+    d:DataContext="{d:DesignData Sample Data/HostViewModelSampleData.xaml}" 
     x:Class="WSApp.HostPivotPage"
     mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="768"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
-    SupportedOrientations="Portrait"  Orientation="Portrait"
+    SupportedOrientations="Portrait"  Orientation="Portrait"    
     shell:SystemTray.IsVisible="True">
-
+  
     <phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar Mode="Default" Opacity="1.0" IsVisible="True" IsMenuEnabled="True"/>
     </phone:PhoneApplicationPage.ApplicationBar>
@@ -39,30 +39,30 @@
                                     <local:AboutTemplateSelector.Button>
                                         <DataTemplate>
                                             <StackPanel Margin="0,0,0,17" Width="456">
-                                                <TextBlock Text="{Binding Line1}" TextWrapping="NoWrap"  Style="{StaticResource PhoneTextLargeStyle}"/>
-                                                <TextBlock Text="{Binding Line2}" TextWrapping="Wrap"  Style="{StaticResource PhoneTextAccentStyle}"/>
-                                                <TextBlock Text="{Binding Line3}" TextWrapping="Wrap"  Style="{StaticResource PhoneTextAccentStyle}"/>
-                                                <TextBlock Text="{Binding Line4}" TextWrapping="Wrap"  Style="{StaticResource PhoneTextAccentStyle}"/>
+                                                <TextBlock Text="{Binding Line1}" TextWrapping="NoWrap"  Style="{StaticResource PhoneTextLargeStyle}" Visibility="{Binding Line1, Converter={StaticResource HideEmptyStringConverter}}"/>
+                                                <TextBlock Text="{Binding Line2}" TextWrapping="Wrap"  Style="{StaticResource PhoneTextAccentStyle}" Visibility="{Binding Line2, Converter={StaticResource HideEmptyStringConverter}}"/>
+                                                <TextBlock Text="{Binding Line3}" TextWrapping="Wrap"  Style="{StaticResource PhoneTextAccentStyle}" Visibility="{Binding Line3, Converter={StaticResource HideEmptyStringConverter}}"/>
+                                                <TextBlock Text="{Binding Line4}" TextWrapping="Wrap"  Style="{StaticResource PhoneTextAccentStyle}" Visibility="{Binding Line4, Converter={StaticResource HideEmptyStringConverter}}"/>
                                             </StackPanel>
                                         </DataTemplate>
                                     </local:AboutTemplateSelector.Button>
                                     <local:AboutTemplateSelector.Subtle>
                                         <DataTemplate>
                                             <StackPanel Margin="0,0,0,17" Width="456">
-                                                <TextBlock Text="{Binding Line1}" TextWrapping="NoWrap"  Style="{StaticResource PhoneTextLargeStyle}"/>                                                
-                                                <TextBlock Text="{Binding Line2}" TextWrapping="Wrap"  Style="{StaticResource PhoneTextSubtleStyle}"/>
-                                                <TextBlock Text="{Binding Line3}" TextWrapping="Wrap"  Style="{StaticResource PhoneTextSubtleStyle}"/>
-                                                <TextBlock Text="{Binding Line4}" TextWrapping="Wrap"  Style="{StaticResource PhoneTextSubtleStyle}"/>
+                                                <TextBlock Text="{Binding Line1}" TextWrapping="NoWrap"  Style="{StaticResource PhoneTextLargeStyle}" Visibility="{Binding Line1, Converter={StaticResource HideEmptyStringConverter}}"/>
+                                                <TextBlock Text="{Binding Line2}" TextWrapping="Wrap"  Style="{StaticResource PhoneTextSubtleStyle}" Visibility="{Binding Line2, Converter={StaticResource HideEmptyStringConverter}}"/>
+                                                <TextBlock Text="{Binding Line3}" TextWrapping="Wrap"  Style="{StaticResource PhoneTextSubtleStyle}" Visibility="{Binding Line3, Converter={StaticResource HideEmptyStringConverter}}"/>
+                                                <TextBlock Text="{Binding Line4}" TextWrapping="Wrap"  Style="{StaticResource PhoneTextSubtleStyle}" Visibility="{Binding Line4, Converter={StaticResource HideEmptyStringConverter}}"/>
                                             </StackPanel>
                                         </DataTemplate>
                                     </local:AboutTemplateSelector.Subtle>
                                     <local:AboutTemplateSelector.Prominent>
                                         <DataTemplate>
                                             <StackPanel Margin="0,0,0,17" Width="456">
-                                                <TextBlock Text="{Binding Line1}" TextWrapping="NoWrap"  Style="{StaticResource PhoneTextLargeStyle}"/>                                                 
-                                                <TextBlock Text="{Binding Line2}" TextWrapping="Wrap"  Style="{StaticResource PhoneTextTitle3Style}"/>
-                                                <TextBlock Text="{Binding Line3}" TextWrapping="Wrap"  Style="{StaticResource PhoneTextTitle3Style}"/>
-                                                <TextBlock Text="{Binding Line4}" TextWrapping="Wrap"  Style="{StaticResource PhoneTextTitle3Style}"/>
+                                                <TextBlock Text="{Binding Line1}" TextWrapping="NoWrap"  Style="{StaticResource PhoneTextLargeStyle}" Visibility="{Binding Line1, Converter={StaticResource HideEmptyStringConverter}}"/>
+                                                <TextBlock Text="{Binding Line2}" TextWrapping="Wrap"  Style="{StaticResource PhoneTextTitle3Style}" Visibility="{Binding Line2, Converter={StaticResource HideEmptyStringConverter}}"/>
+                                                <TextBlock Text="{Binding Line3}" TextWrapping="Wrap"  Style="{StaticResource PhoneTextTitle3Style}" Visibility="{Binding Line3, Converter={StaticResource HideEmptyStringConverter}}"/>
+                                                <TextBlock Text="{Binding Line4}" TextWrapping="Wrap"  Style="{StaticResource PhoneTextTitle3Style}" Visibility="{Binding Line4, Converter={StaticResource HideEmptyStringConverter}}"/>
                                             </StackPanel>
                                         </DataTemplate>
                                     </local:AboutTemplateSelector.Prominent>

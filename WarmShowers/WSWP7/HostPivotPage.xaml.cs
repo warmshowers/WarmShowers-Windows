@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using Microsoft.Phone.Shell;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Tasks;
@@ -102,6 +103,8 @@ namespace WSApp
         // Constructor
         public HostPivotPage()
         {
+            this.Resources.Add("HideEmptyStringConverter", new HideEmptyStringConverter());
+
             InitializeComponent();
 
             DataContext = App.ViewModelHost;
@@ -344,5 +347,19 @@ namespace WSApp
         }
 
         #endregion
-    }        
+
+        public class HideEmptyStringConverter : IValueConverter
+        {
+            public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo language)
+            {
+                var input = (string)value;
+                return string.IsNullOrWhiteSpace(input) ? Visibility.Collapsed : Visibility.Visible;
+            }
+
+            public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo language)
+            {
+                throw new NotImplementedException();
+            }
+        }
+    }
 }
