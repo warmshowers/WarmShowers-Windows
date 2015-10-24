@@ -616,6 +616,12 @@ namespace WSApp
 
         private void loginbutton_Click(object sender, RoutedEventArgs e)
         {
+            if (ub.Text == "")
+            {   // This was leaving UI in logged-in state
+                this.cancelbutton_Click(sender, e);
+                return;
+            }
+
             // Close the popup.
             p.IsOpen = false;
 
