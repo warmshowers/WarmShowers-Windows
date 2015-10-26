@@ -42,7 +42,6 @@ using System.Runtime.Serialization;
 //"98313":{"uid":"98313","name":"klzig_test","mode":"0","sort":"0","threshold":"0","theme":"","signature":"","created":"1438580975","access":"1438667415","status":"1","timezone":"-21600","language":"en-working","picture":"","login":"1438581524","timezone_name":"America/Denver","signature_format":"0","fullname":"Kurt Ziegler Test","notcurrentlyavailable":"1","notcurrentlyavailable_reason":null,"fax_number":"","mobilephone":"","workphone":"","homephone":"","preferred_notice":"","cost":"","maxcyclists":"1","storage":"0","motel":"","campground":"","bikeshop":"","comments":"This is a test account for validating the Warm Showers for Windows Phone app.  Primarily used for testing messaging.","shower":"0","kitchenuse":"0","lawnspace":"0","sag":"0","bed":"0","laundry":"0","food":"0","howdidyouhear":"","lastcorrespondence":null,"languagesspoken":"","URL":"","isstale":"0","isstale_date":"0","isstale_reason":null,"isunreachable":"0","unreachable_date":"0","unreachable_reason":null,"becomeavailable":"1596348000","set_unavailable_timestamp":"1438580975","set_available_timestamp":"0","last_unavailability_pester":"1438580975","hide_donation_status":"0","email_opt_out":"0","oid":"98313","type":"","street":"","additional":"","city":"Boise","province":"id","postal_code":"","country":"us","latitude":"43.618710","longitude":"-116.214607","source":"5"}}}
 
 
-
 namespace WSApp.DataModel
 {
     [DataContract]

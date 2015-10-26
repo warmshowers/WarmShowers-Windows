@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Microsoft.Phone.Controls.Maps;
 using System.Device.Location;
 using System.Runtime.Serialization.Json;
+using Newtonsoft.Json;
 using System.Globalization;
 using WSApp.DataModel;
 
@@ -765,13 +766,11 @@ namespace WSApp.DataModel
                         debugPayload += "\n\nRESPONSE\n" + junk;
                     }
 
-                    var serializer = new DataContractJsonSerializer(typeof(Users.Users_result));
-          //          App.nearby.hosts.hosts_Result = (Hosts.Hosts_Result)serializer.ReadObject(stream);
-                    Users.Users_result x = (Users.Users_result)serializer.ReadObject(stream);
+                    var s = sr.ReadToEnd();
+                    Users.Users_result x = JsonConvert.DeserializeObject<Users.Users_result>(s);
                     stream.Close();
-                    Users.Users_result y = x;
 
-                    App.nearby.loadHosts();
+         //           App.nearby.loadFound();
                 }
                 response.Close();
             }
