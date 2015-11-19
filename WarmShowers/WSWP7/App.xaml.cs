@@ -12,7 +12,8 @@ namespace WSApp
 {
     public partial class App : Application
     {
-        internal const string Id = "AsepX6xSjbXpNFjEbaMKN7LIVDsyKuGZh6ibuzK94ONsf6G99W5VUvtRZJxW05VO";
+
+        internal const string Id = APIKeys.bingMapsToken;
         private static MainViewModel viewModelMain = null;
         private static HostViewModel viewModelHost = null;
         private static MessageViewModel viewModelMessage = null; 
