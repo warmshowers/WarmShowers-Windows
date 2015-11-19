@@ -8,7 +8,7 @@ namespace WSApp
     // To enable complete map functionality:
     //   1) Obtain an api key from the specified web site
     //   2) Assign the key to the token
-    //   3) This file is .gitignored to avoid pushing live credentials
+    //   3) 'git update-index --assume-unchanged APIKeys.cs' to prevent this file being pushed with a live key
 
      class APIKeys
     {
