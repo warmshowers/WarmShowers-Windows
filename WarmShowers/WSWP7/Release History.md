@@ -19,6 +19,9 @@ v2.0.0.0 30Mar2016 (planned)
 * Add 'view host on web site' menu item to hosts pivot.  Issue 6.
 * Add Google Analytics tracking.  Issue 44.
 
+v1.3.1.1 18Nov2015
+* Fixed issue with map API key.
+
 v1.3.1.0 18Oct2015
 * Fixed bug that displayed username instead of fullname after D7 upgrade.  Issue 56.
 
