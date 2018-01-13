@@ -3,7 +3,7 @@ WarmShowers-Windows
 
 This is the home for Warm Showers for WP7, WP8, and Windows projects.
 
-NOTICE: As of 1 January 2018, Warm Showers for Windows Phone is no longer supported. Except for issue 62 (a minor regression) the app functions normally and will remain in the Windows Store as long as that is the case. No further releases will be made.
+NOTICE: As of 1 January 2018, Warm Showers for Windows Phone is no longer supported. Except for <a href="https://github.com/warmshowers/WarmShowers-Windows/issues/62">issue 62</a> (a minor regression) the app functions normally and will remain in the Windows Store as long as that is the case. No further releases will be made.
 
 * <a href="https://github.com/warmshowers/WarmShowers-Windows/blob/master/WarmShowers/WSWP7/Release%20History.md">Release history</a>
 * <a href="https://github.com/warmshowers/WarmShowers-Windows/blob/master/User%20Guide.pdf">User Guide</a> (a work in progress)
