@@ -1,23 +1,12 @@
 ﻿Release History
 ===============
 
-Warm Showers for Windows Phone
+1 January 2018
 
-v2.0.0.0 30Mar2016 (planned)
-* Target Windows Phone 8.1.  Issue 42.
-  Requires Windows Phone 8.1 or greater.
-* Support downloaded (offline) maps.  Issue 42.
-* Add keyword search for members.  Issue 17.
-* Display host availability.  Issue 54.
-* Optionally show user's lat/lon on phone and in email footer.  Issue 43.
-* Cache profile picture.  Issue 51.
-* Don't request host info that is already cached.  Issue 52.
-* Display feedback given by hosts.  Issue 38.
-* Make links in comments and feedback clickable.  Issue 36.
-* Support clipboard copy of host profile information.  Issue 57.
-* Add 'show my profile' item to main menu.  Issue 34.
-* Add 'view host on web site' menu item to hosts pivot.  Issue 6.
-* Add Google Analytics tracking.  Issue 44.
+Warm Showers for Windows Phone is no longer supported.
+Except for the minor regression listed below, the app functions normally and will remain in the Windows Store as long as that is the case.  No further releases will be made.
+
+* Date, host type, and experience are missing in feedback.  Issue 62.
 
 v1.3.1.1 18Nov2015
 * Fixed issue with map API key.
