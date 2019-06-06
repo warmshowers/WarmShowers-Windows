@@ -1,6 +1,10 @@
 ﻿Release History
 ===============
 
+5 June 2019
+
+Warm Showers for Windows Phone has been disabled and removed from app store.
+
 1 January 2018
 
 Warm Showers for Windows Phone is no longer supported.
